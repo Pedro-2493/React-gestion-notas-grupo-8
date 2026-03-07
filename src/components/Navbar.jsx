@@ -9,7 +9,7 @@ import styles from './Navbar.module.css'
 
 function Navbar() {
   return (
-    <nav className={styles.nav}>
+    <nav className={styles.nav} aria-label="Navegación principal">
       <a href="/" className={styles.logo}>
         <img
           src="/evalix.png"
