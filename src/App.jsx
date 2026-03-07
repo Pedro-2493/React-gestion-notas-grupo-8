@@ -1,6 +1,5 @@
 import Home from './views/Home'
-
-// Se activan cuando el equipo suba sus componentes
+import FeatureCards from './components/featurecards'
 // import Navbar from './components/Navbar'
 // import Footer from './components/Footer'
 
