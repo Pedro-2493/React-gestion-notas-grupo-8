@@ -1,0 +1,82 @@
+/*
+ * RESPONSABLE: Kevin
+ * Archivo: Navbar.module.css
+ * Descripción: Estilos del componente Navbar con efecto neon y backdrop-filter
+ */
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.15);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  text-decoration: none;
+}
+
+.logoImg {
+  filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.7));
+  transition: filter 0.3s ease;
+}
+
+.logoImg:hover {
+  filter: drop-shadow(0 0 14px rgba(0, 255, 255, 1));
+}
+
+.navLinks {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.navLink {
+  color: #00ffff;
+  text-decoration: none;
+  font-family: 'Exo 2', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.05rem;
+  text-shadow:
+    0 0 6px rgba(0, 255, 255, 0.8),
+    0 0 12px rgba(0, 255, 255, 0.4);
+  transition: text-shadow 0.3s ease, color 0.3s ease;
+}
+
+.navLink:hover {
+  color: #ffffff;
+  text-shadow:
+    0 0 10px rgba(0, 255, 255, 1),
+    0 0 20px rgba(0, 255, 255, 0.7),
+    0 0 35px rgba(0, 255, 255, 0.4);
+}
+
+/* Responsive para pantallas pequeñas */
+@media (max-width: 768px) {
+  .nav {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .navLinks {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .navLink {
+    font-size: 0.85rem;
+  }
+}
