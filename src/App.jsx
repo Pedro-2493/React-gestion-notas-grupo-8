@@ -1,19 +1,18 @@
-import Home from './views/Home'
-import FeatureCards from './components/featurecards'
-import Navbar from './components/Navbar'
-import Footer from './components/Footer'
+import { Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Home from "./views/Home";
+import Contacto from "./views/contacto";
 
-
-function App() {
+const App = () => {
   return (
-    <div>
-      {/* <Navbar /> */}
-      <Home />
-        <>
-      <Footer />
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/contacto" element={<Contacto />} />
+      </Routes>
     </>
-    </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

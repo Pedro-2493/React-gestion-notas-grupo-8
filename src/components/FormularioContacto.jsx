@@ -14,17 +14,17 @@ const manejarCambio = (e) => {
 const manejarEnvio = (e) => {
     e.preventDefault();
     alEnviar(datosFormulario);
-    
+
 };
 
 return (
-    <div className="bg-white rounded-2xl shadow-md p-8 w-full max-w-lg mx-auto">
+    <div className="bg-white rounded-2xl shadow-md p-8 w-full">
     <h2 className="text-2xl font-bold text-gray-800 mb-6">Envíanos un Mensaje</h2>
     <form onSubmit={manejarEnvio}>
         <CamposInput datosFormulario={datosFormulario} manejarCambio={manejarCambio} />
         <CampoMensaje valor={datosFormulario.mensaje} manejarCambio={manejarCambio} />
         <button type="submit"
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200">
+        className="btn-primary w-full font-semibold py-2 px-4 rounded-md transition-colors duration-200 cursor-pointer">
         Enviar Mensaje
         </button>
     </form>
