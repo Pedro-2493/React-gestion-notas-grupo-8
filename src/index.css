@@ -1,12 +1,13 @@
 @import "tailwindcss";
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Exo 2', 'Orbitron', system-ui, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color-scheme: dark;
+  color: #e0f2fe;
+  background-color: #0a1628;   /* fondo oscuro de Evalix — reemplaza #747bff */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -16,19 +17,20 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+  color: #00f5ff;              /* cian Evalix en lugar de morado */
+  text-decoration: none;
 }
+
 a:hover {
-  color: #535bf2;
+  color: #4ecdc4;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+  padding: 0;
   min-height: 100vh;
+  overflow-x: hidden;
+  background-color: #0a1628;   /* doble seguro — cubre body además de :root */
 }
 
 h1 {
@@ -43,35 +45,29 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #0d1e35;
+  color: #e0f2fe;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  transition: border-color 0.25s, background-color 0.25s;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-  button.btn-primary {
-  background-color: #2563eb !important;
-  color: white !important;
+button:hover {
+  border-color: #00f5ff;
+}
+
+button:focus,
+button:focus-visible {
+  outline: 2px solid #00f5ff;
+}
+
+/* Botón primario — para el CTA de Evalix */
+button.btn-primary {
+  background-color: #00b785;
+  color: #0a1628;
+  font-weight: 700;
 }
 
 button.btn-primary:hover {
-  background-color: #1d4ed8 !important;
-}
+  background-color: #00f5ff;
+  color: #0a1628;
 }

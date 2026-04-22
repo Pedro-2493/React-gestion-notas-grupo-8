@@ -1,4 +1,4 @@
-/* HERO */
+/* HERO*/ 
 .hero {
   min-height: 60vh;
   display: flex;
@@ -23,7 +23,7 @@
   letter-spacing: 2px;
 }
 
-/* CARACTERÍSTICAS */
+/* CARACTERÍSTICAS*/
 .featuresGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -64,7 +64,7 @@
   font-size: 0.9rem;
   line-height: 1.6;
 }
-
+/*#747bff*/
 /* TESTIMONIAL */
 .testimonial {
   max-width: 700px;
@@ -77,7 +77,7 @@
 
 .testimonialText {
   font-size: 1.05rem;
-  color: #cce8f4;
+  color: #94a1a7;
   font-style: italic;
   line-height: 1.75;
   margin-bottom: 1rem;
@@ -112,7 +112,7 @@
 
 .usuarioCard:hover {
   border-color: #00f5ff;
-}
+}/**/
 
 .usuarioCard span:first-child {
   font-size: 2rem;

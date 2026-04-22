@@ -15,12 +15,9 @@ function Navbar() {
         <span className={styles.navLink}>Administrador</span>
       </Link>
       <div className={styles.navLinks}>
-        <a className={styles.navLink} href="/profesores">Profesores</a>
-        <a className={styles.navLink} href="/alumnos">Alumnos</a>
-        <a className={styles.navLink} href="/nosotros">Nosotros</a>
-        <Link to="/contacto" className="text-gray-700 hover:text-blue-600 font-medium">
-        Contacto
-      </Link>
+        <Link to="/" className={styles.navLink}>Inicio</Link>
+        <Link to="/docentes" className={styles.navLink}>Docentes</Link>
+        <Link to="/contacto" className={styles.navLink}>Contacto</Link>
       </div>
     </nav>
   )

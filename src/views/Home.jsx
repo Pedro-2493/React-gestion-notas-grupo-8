@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { usuariosData } from '../data/usuarios'
 import { caracteristicasData } from '../data/caracteristicas'
 import styles from './Home.module.css'
-import Footer from "../components/Footer";
+
 
 
 
