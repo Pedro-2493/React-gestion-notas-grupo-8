@@ -1,0 +1,152 @@
+/* ── PÁGINA COMPLETA ── */
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+/* ── CARD CENTRAL ── */
+.card {
+  background: #0d1e35;
+  border: 1px solid rgba(0, 245, 255, 0.2);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* ── LOGO ── */
+.logo {
+  width: 80px;
+  height: auto;
+  margin-bottom: 0.5rem;
+}
+
+/* ── TÍTULO ── */
+.titulo {
+  font-family: 'Orbitron', sans-serif;
+  color: #00f5ff;
+  font-size: 1.4rem;
+  margin: 0;
+  text-align: center;
+}
+
+/* ── FORM ── */
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  margin-top: 0.5rem;
+}
+
+/* ── GRUPO label + input ── */
+.grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.grupo label {
+  font-size: 0.85rem;
+  color: #a8d8e8;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+/* ── INPUT y SELECT ── */
+.input {
+  background: #091525;
+  border: 1px solid rgba(0, 245, 255, 0.25);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  color: #e0f2fe;
+  font-size: 0.95rem;
+  font-family: 'Exo 2', sans-serif;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input:focus {
+  border-color: #00f5ff;
+  box-shadow: 0 0 0 3px rgba(0, 245, 255, 0.1);
+}
+
+.input option {
+  background: #091525;
+  color: #e0f2fe;
+}
+
+/* ── ERROR ── */
+.error {
+  color: #ff6b6b;
+  font-size: 0.85rem;
+  text-align: center;
+  margin: 0;
+  padding: 0.5rem;
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  border-radius: 8px;
+  background: rgba(255, 107, 107, 0.05);
+}
+
+/* ── BOTÓN ── */
+.boton {
+  background: #00b785;
+  color: #0a1628;
+  border: none;
+  border-radius: 8px;
+  padding: 0.85rem;
+  font-size: 1rem;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.boton:hover:not(:disabled) {
+  background: #00f5ff;
+}
+
+.boton:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.boton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── CREDENCIALES DE PRUEBA ── */
+.ayuda {
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid rgba(0, 245, 255, 0.1);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.ayuda p {
+  color: #a8d8e8;
+  font-size: 0.78rem;
+  margin: 0;
+}
+
+.ayuda code {
+  color: #4ecdc4;
+  font-size: 0.78rem;
+  background: rgba(0, 245, 255, 0.05);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+}

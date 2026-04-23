@@ -4,6 +4,7 @@ import Footer from "./components/Footer";
 import Home from "./views/Home";
 import Contacto from "./views/Contacto";
 import Docentes from "./views/Docentes";
+import LoginPage from "./views/LoginPage";
 
 const App = () => {
   return (
@@ -11,6 +12,7 @@ const App = () => {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/contacto" element={<Contacto />} />
         <Route path="/docentes" element={<Docentes />} />
       </Routes>

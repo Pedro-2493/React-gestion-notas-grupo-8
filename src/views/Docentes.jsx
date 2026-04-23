@@ -1,12 +1,11 @@
-
-import "../components/docentes.css";
+import styles from "./Docentes.module.css";
 
 function Docentes() {
     return (
         <main>
-            <div className="container">
-                <aside className="navbar">
-                    <ul className="navbar__list">
+            <div className={styles.container}>
+                <aside className={styles.navbar}>
+                    <ul className={styles.navbar__list}>
                         <li><a href="#notas">Notas</a></li>
                         <li><a href="#asistencia">Asistencia</a></li>
                         <li><a href="#reportes">Reportes</a></li>
@@ -14,11 +13,11 @@ function Docentes() {
                     </ul>
                 </aside>
 
-                <section className="main">
-                    <div className="information-block">
+                <section className={styles.main}>
+                    <div className={styles.informationBlock}>
                         <h2>Información Docente</h2>
 
-                        <div className="information-block__teacher">
+                        <div className={styles.informationBlockTeacher}>
                             <div>
                                 <p>Nombre: Steven Wattson</p>
                                 <p>Cédula: 1000678090</p>
@@ -28,7 +27,7 @@ function Docentes() {
 
                             <div>
                                 <img
-                                    className="information-block__user-icon"
+                                    className={styles.informationBlockUserIcon}
                                     src="/evalix.png"
                                     alt="Usuario"
                                 />
@@ -39,7 +38,7 @@ function Docentes() {
                         </div>
                     </div>
 
-                    <div className="container-principal">
+                    <div className={styles.containerPrincipal}>
                         <img
                             src="/evalix.png"
                             alt="Imagen de docente"
