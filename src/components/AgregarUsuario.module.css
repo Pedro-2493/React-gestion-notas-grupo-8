@@ -1,0 +1,89 @@
+.card {
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 480px;
+  margin: 24px auto;
+}
+
+.titulo {
+  margin: 0 0 8px;
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.subtitulo {
+  margin: 0 0 24px;
+  color: #475569;
+  font-size: 13px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.campo label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.campo input,
+.campo select {
+  background: #020617;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: white;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.campo input::placeholder {
+  color: #334155;
+}
+
+.campo input:focus,
+.campo select:focus {
+  border-color: #22d3ee;
+  background: #0a1628;
+}
+
+.campo select option {
+  background: #0f172a;
+}
+
+.boton {
+  background: linear-gradient(90deg, #22d3ee, #3b82f6);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 13px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.boton:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.boton:active {
+  transform: translateY(0px);
+}

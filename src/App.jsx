@@ -7,6 +7,8 @@ import Docentes from "./views/Docentes";
 import LoginPage from "./views/LoginPage";
 import UsuariosList from "./views/UsuariosList";
 import { UsuariosProvider } from "./context/UsuariosContext";
+import EstudiantesDashboard from "./views/EstudiantesDashboard";
+
 
 const App = () => {
   return (
@@ -17,6 +19,7 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/contacto" element={<Contacto />} />
         <Route path="/docentes" element={<Docentes />} />
+        <Route path="/estudiantes" element={<EstudiantesDashboard />} />
         <Route path="/usuarios" element={<UsuariosList />} />
       </Routes>
       <Footer />
