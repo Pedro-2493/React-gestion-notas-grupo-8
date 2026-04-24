@@ -19,6 +19,7 @@ function Navbar() {
         <Link to="/login" className={styles.navLink}>Ingresar</Link>  
         <Link to="/docentes" className={styles.navLink}>Docentes</Link>
         <Link to="/contacto" className={styles.navLink}>Contacto</Link>
+        <Link to="/usuarios" className={styles.navLink}>Usuarios</Link>
       </div>
     </nav>
   )
