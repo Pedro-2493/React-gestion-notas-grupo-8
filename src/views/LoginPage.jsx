@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styles from './LoginPage.module.css'
+import Logo from "../images/evalix.png"
 
 // Mock de usuarios para simular autenticación
 const USUARIOS_MOCK = [
@@ -74,7 +75,7 @@ function LoginPage() {
 
         {/* Logo */}
         <img
-          src="/assets/imagenes/evalix.png"
+          src={Logo}
           alt="Evalix"
           className={styles.logo}
         />
