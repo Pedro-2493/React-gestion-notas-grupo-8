@@ -2,18 +2,29 @@ import { useUsuarios } from '../context/UsuariosContext'
 import UsuarioCard from '../components/UsuarioCard'
 import styles from './UsuariosList.module.css'
 
-export default function UsuariosList() {
+function UsuariosList() {
   const { usuarios } = useUsuarios()
 
   return (
-    <div className={styles.contenedor}>
-      <h1 className={styles.titulo}>Usuarios del sistema</h1>
-      <p className={styles.subtitulo}>{usuarios.length} usuarios registrados</p>
-      <div className={styles.lista}>
+    <main>
+      <section className={styles.header}>
+        <h1 className={styles.titulo}>Usuarios del sistema</h1>
+        <p className={styles.subtitulo}>{usuarios.length} usuarios registrados</p>
+      </section>
+      <section className={styles.usuariosGrid}>
         {usuarios.map((usuario) => (
-          <UsuarioCard key={usuario.id} usuario={usuario} />
+          <UsuarioCard
+            key={usuario.id}
+            avatar="👤"
+            nombre={usuario.nombre}
+            rol={usuario.rol}
+            materia={usuario.email}
+            estado="activo"
+          />
         ))}
-      </div>
-    </div>
+      </section>
+    </main>
   )
 }
+
+export default UsuariosList
