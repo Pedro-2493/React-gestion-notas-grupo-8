@@ -26,6 +26,7 @@ function Navbar() {
         <Link to="/docentes" className={styles.navLink}>Docentes</Link>
         <Link to="/estudiantes" className={styles.navLink}>Estudiantes</Link>
         <Link to="/contacto" className={styles.navLink}>Contacto</Link>
+        <Link to="/usuarios" className={styles.navLink}>Usuarios</Link>
       </div>
 
     </nav>
