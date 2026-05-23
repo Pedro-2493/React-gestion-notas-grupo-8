@@ -79,3 +79,39 @@
 .navLink:hover {
   color: #22d3ee;
 }
+
+@media (max-width: 768px) {
+  .nav {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .navLinks {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .brandText h2 {
+    font-size: 18px;
+  }
+
+  .brandText p {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav {
+    padding: 0.75rem;
+  }
+
+  .navLinks {
+    gap: 0.75rem;
+  }
+
+  .navLink {
+    font-size: 14px;
+  }
+}

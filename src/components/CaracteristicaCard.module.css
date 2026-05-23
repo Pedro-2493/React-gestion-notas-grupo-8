@@ -1,15 +1,15 @@
 .featureCard {
   padding: 1.5rem;
   border-radius: 0.5rem;
-  background: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   text-align: center;
   transition: transform 0.2s;
 }
 
 .featureCard:hover {
   transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-color: rgba(34, 211, 238, 0.3);
 }
 
 .featureCard span {
@@ -21,9 +21,16 @@
 .featureCard h3 {
   font-weight: 600;
   margin-bottom: 0.5rem;
+  color: #e0f2fe;
 }
 
 .featureCard p {
   font-size: 0.875rem;
-  color: #666;
+  color: #94a3b8;
+}
+
+@media (max-width: 640px) {
+  .featureCard {
+    padding: 1rem;
+  }
 }

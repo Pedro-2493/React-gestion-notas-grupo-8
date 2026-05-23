@@ -128,3 +128,37 @@
   color: #4a7a9b;
   font-size: 0.82rem;
 }
+
+@media (max-width: 640px) {
+  .hero {
+    min-height: 40vh;
+    padding: 2rem 1rem;
+  }
+
+  .heroTitle {
+    font-size: clamp(1.4rem, 6vw, 1.8rem);
+  }
+
+  .heroSub {
+    font-size: 0.95rem;
+  }
+
+  .featuresGrid {
+    padding: 2rem 1rem;
+    gap: 1rem;
+  }
+
+  .testimonial {
+    padding: 2rem 1rem;
+    margin: 0 1rem;
+  }
+
+  .testimonialText {
+    font-size: 0.9rem;
+  }
+
+  .usuariosGrid {
+    padding: 0 1rem;
+    margin: 2rem auto;
+  }
+}

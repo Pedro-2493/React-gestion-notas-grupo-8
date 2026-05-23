@@ -61,3 +61,32 @@
 .links a:hover {
   color: #94a3b8;
 }
+
+@media (max-width: 640px) {
+  .container {
+    padding: 40px 16px;
+  }
+
+  .title {
+    font-size: 1.2rem;
+  }
+
+  .text {
+    font-size: 0.875rem;
+  }
+
+  .button {
+    padding: 10px 20px;
+    font-size: 0.875rem;
+  }
+
+  .links {
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .copy {
+    font-size: 0.75rem;
+  }
+}

@@ -113,3 +113,53 @@
   background: rgba(239, 68, 68, 0.15);
   color: #ef4444;
 }
+
+@media (max-width: 768px) {
+  .pagina {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .perfil {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .tabla {
+    font-size: 12px;
+  }
+
+  .tabla th,
+  .tabla td {
+    padding: 8px 6px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .pills {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagina {
+    padding: 12px;
+  }
+
+  .tabla {
+    font-size: 11px;
+  }
+
+  .tabla th,
+  .tabla td {
+    padding: 6px 4px;
+  }
+
+  .tabla {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}

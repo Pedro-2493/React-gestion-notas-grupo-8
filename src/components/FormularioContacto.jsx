@@ -18,13 +18,14 @@ const manejarEnvio = (e) => {
 };
 
 return (
-    <div className="bg-white rounded-2xl shadow-md p-8 w-full">
-    <h2 className="text-2xl font-bold text-gray-800 mb-6">Envíanos un Mensaje</h2>
+    <div className="rounded-2xl p-8 w-full" style={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.08)' }}>
+    <h2 className="text-2xl font-bold mb-6" style={{ color: '#e0f2fe' }}>Envíanos un Mensaje</h2>
     <form onSubmit={manejarEnvio}>
         <CamposInput datosFormulario={datosFormulario} manejarCambio={manejarCambio} />
         <CampoMensaje valor={datosFormulario.mensaje} manejarCambio={manejarCambio} />
         <button type="submit"
-        className="btn-primary w-full font-semibold py-2 px-4 rounded-md transition-colors duration-200 cursor-pointer">
+        className="w-full font-semibold py-2 px-4 rounded-md transition-colors duration-200 cursor-pointer"
+        style={{ background: 'linear-gradient(90deg, #22d3ee, #3b82f6)', color: 'white', border: 'none' }}>
         Enviar Mensaje
         </button>
     </form>

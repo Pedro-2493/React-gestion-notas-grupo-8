@@ -5,9 +5,9 @@
 
 .navbar {
   width: 200px;
-  background: #f5f5f5;
+  background: #0f172a;
   padding: 2rem 1rem;
-  border-right: 1px solid #ddd;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .navbar__list {
@@ -20,14 +20,14 @@
 }
 
 .navbar__list a {
-  color: #333;
+  color: #94a3b8;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s;
 }
 
 .navbar__list a:hover {
-  color: #3b82f6;
+  color: #22d3ee;
 }
 
 .main {
@@ -36,16 +36,17 @@
 }
 
 .informationBlock {
-  background: white;
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 0.5rem;
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .informationBlock h2 {
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
+  color: #e0f2fe;
 }
 
 .informationBlockTeacher {
@@ -61,7 +62,7 @@
 
 .informationBlockTeacher p {
   margin-bottom: 0.5rem;
-  color: #666;
+  color: #94a3b8;
 }
 
 .informationBlockTeacher a {
@@ -88,11 +89,11 @@
 }
 
 .containerPrincipal {
-  background: white;
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 0.5rem;
   padding: 2rem;
   text-align: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .containerPrincipal img {
@@ -108,15 +109,55 @@
   .navbar {
     width: 100%;
     border-right: none;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 1rem;
   }
 
   .navbar__list {
     flex-direction: row;
-    gap: 2rem;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .main {
+    padding: 1rem;
   }
 
   .informationBlockTeacher {
     flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .informationBlockTeacher a {
+    width: 100%;
+    text-align: center;
+  }
+
+  .informationBlockTeacher > div {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0.75rem;
+  }
+
+  .navbar__list {
+    gap: 0.5rem;
+  }
+
+  .navbar__list a {
+    font-size: 0.875rem;
+  }
+
+  .informationBlock {
+    padding: 1rem;
+  }
+
+  .informationBlock h2 {
+    font-size: 1.2rem;
   }
 }

@@ -61,7 +61,7 @@ function LoginPage() {
       if (usuario) {
         // Redirige según el rol
         if (form.rol === 'docente') navigate('/docentes') // ← con 's'
-        if (form.rol === 'estudiante') navigate('/')         // ← por ahora a Home
+        if (form.rol === 'estudiante') navigate('/estudiantes')
         if (form.rol === 'administrador') navigate('/admin')
       } else {
         setError('Credenciales incorrectas. Verifica tus datos.')
