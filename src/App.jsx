@@ -7,26 +7,31 @@ import Docentes from "./views/Docentes";
 import LoginPage from "./views/LoginPage";
 import UsuariosList from "./views/UsuariosList";
 import { UsuariosProvider } from "./context/UsuariosContext";
+import { AuthProvider } from "./context/AuthContext";
 import EstudiantesDashboard from "./views/EstudiantesDashboard";
 import AdminDashboard from "./views/AdminDashboard";
 import WhatsAppButton from "./components/WhatsAppButton";
+import ProtectedRoute from "./components/ProtectedRoute";
+import PublicRoute from "./components/PublicRoute";
 
 const App = () => {
   return (
+    <AuthProvider>
     <UsuariosProvider>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
         <Route path="/contacto" element={<Contacto />} />
-        <Route path="/docentes" element={<Docentes />} />
-        <Route path="/estudiantes" element={<EstudiantesDashboard />} />
+        <Route path="/docentes" element={<ProtectedRoute roles={['docente']}><Docentes /></ProtectedRoute>} />
+        <Route path="/estudiantes" element={<ProtectedRoute roles={['estudiante']}><EstudiantesDashboard /></ProtectedRoute>} />
         <Route path="/usuarios" element={<UsuariosList />} />
-        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin" element={<ProtectedRoute roles={['administrador']}><AdminDashboard /></ProtectedRoute>} />
       </Routes>
       <Footer />
       <WhatsAppButton />
     </UsuariosProvider>
+    </AuthProvider>
   );
 };
 

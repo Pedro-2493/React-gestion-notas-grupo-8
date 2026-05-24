@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import styles from './LoginPage.module.css'
 import Logo from "../images/evalix.png"
 
@@ -25,6 +26,7 @@ function LoginPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
+  const { login: authLogin } = useAuth()
   const navigate = useNavigate()
 
   // ── Handler genérico: actualiza el campo que cambió ─
@@ -62,8 +64,9 @@ function LoginPage() {
     setTimeout(() => {
       setLoading(false)
       if (usuario) {
+        authLogin({ email: usuario.email, rol: usuario.rol })
         // Redirige según el rol
-        if (form.rol === 'docente') navigate('/docentes') // ← con 's'
+        if (form.rol === 'docente') navigate('/docentes')
         if (form.rol === 'estudiante') navigate('/estudiantes')
         if (form.rol === 'administrador') navigate('/admin')
       } else {
