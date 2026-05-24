@@ -8,6 +8,7 @@ import LoginPage from "./views/LoginPage";
 import UsuariosList from "./views/UsuariosList";
 import { UsuariosProvider } from "./context/UsuariosContext";
 import EstudiantesDashboard from "./views/EstudiantesDashboard";
+import AdminDashboard from "./views/AdminDashboard";
 import WhatsAppButton from "./components/WhatsAppButton";
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/docentes" element={<Docentes />} />
         <Route path="/estudiantes" element={<EstudiantesDashboard />} />
         <Route path="/usuarios" element={<UsuariosList />} />
+        <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
       <Footer />
       <WhatsAppButton />
