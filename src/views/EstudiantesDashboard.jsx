@@ -1,51 +1,60 @@
-import React, { useState } from "react";
-import "./EstudiantesDashboard.css";
+import { useState, useEffect } from "react"
+import { gradeService } from "../api/grades"
+import { subjectService } from "../api/subjects"
+import "./EstudiantesDashboard.css"
 
-// Datos del estudiante
 const ESTUDIANTE = {
   nombre: "Melina",
   apellido: "Ramirez",
   email: "melirez@evalix.edu.co",
   documento: "1002345678",
   grupo: "EV0001",
-};
-
-// Lista de materias
-const MATERIAS = [
-  { id: 101, nombre: "Cálculo Diferencial" },
-  { id: 102, nombre: "Estructuras de Datos" },
-  { id: 103, nombre: "Base de Datos I" },
-  { id: 104, nombre: "Inglés Técnico" },
-];
-
-// Notas por materia
-const NOTAS = [
-  { id: 1, materia_id: 101, periodo: "2024-1", nota1: 3.8, nota2: 4.2, nota3: 4.5 },
-  { id: 2, materia_id: 102, periodo: "2024-1", nota1: 3.5, nota2: 3.8, nota3: 4.0 },
-  { id: 3, materia_id: 103, periodo: "2024-1", nota1: 4.0, nota2: 4.1, nota3: 4.3 },
-  { id: 4, materia_id: 104, periodo: "2024-1", nota1: 4.5, nota2: 4.7, nota3: 4.8 },
-  { id: 5, materia_id: 101, periodo: "2024-2", nota1: 4.0, nota2: 4.3, nota3: 4.6 },
-  { id: 6, materia_id: 102, periodo: "2024-2", nota1: 3.9, nota2: 4.1, nota3: 4.2 },
-];
-
-// Calcula el promedio de 3 notas
-function calcularPromedio(n1, n2, n3) {
-  return ((n1 + n2 + n3) / 3).toFixed(2);
+  id: 1,
 }
 
+const MATERIAS_MOCK = [
+  { id: 101, subjectName: "Cálculo Diferencial" },
+  { id: 102, subjectName: "Estructuras de Datos" },
+  { id: 103, subjectName: "Base de Datos I" },
+  { id: 104, subjectName: "Inglés Técnico" },
+]
+
+const NOTAS_MOCK = [
+  { id: 1, subjectId: 101, period: "2024-1", value: 3.8 },
+  { id: 2, subjectId: 102, period: "2024-1", value: 3.5 },
+  { id: 3, subjectId: 103, period: "2024-1", value: 4.0 },
+  { id: 4, subjectId: 104, period: "2024-1", value: 4.5 },
+  { id: 5, subjectId: 101, period: "2024-2", value: 4.0 },
+  { id: 6, subjectId: 102, period: "2024-2", value: 3.9 },
+]
+
 export default function EstudiantesDashboard() {
-  const [periodo, setPeriodo] = useState("2024-1");
+  const [subjects, setSubjects] = useState(MATERIAS_MOCK)
+  const [notas, setNotas] = useState(NOTAS_MOCK)
+  const [periodo, setPeriodo] = useState("2024-1")
 
-  // Periodos disponibles (sin repetidos)
-  const periodos = [...new Set(NOTAS.map((n) => n.periodo))];
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const [subjectsData, gradesData] = await Promise.all([
+          subjectService.listar(),
+          gradeService.porEstudiante(ESTUDIANTE.id),
+        ])
+        if (subjectsData.length) setSubjects(subjectsData.map(s => ({ id: s.id, subjectName: s.subjectName })))
+        if (gradesData.length) setNotas(gradesData.map(g => ({ id: g.id, subjectId: g.subjectId, period: g.period, value: g.value })))
+      } catch {
+        console.warn('Usando datos de prueba para notas')
+      }
+    }
+    loadData()
+  }, [])
 
-  // Notas del periodo seleccionado
-  const notasDelPeriodo = NOTAS.filter((n) => n.periodo === periodo);
+  const periodos = [...new Set(notas.map(n => n.period))]
+  const notasDelPeriodo = notas.filter(n => n.period === periodo)
 
   return (
     <div className="pagina">
 
-      {/* PERFIL */}
       <div className="card">
         <div className="perfil">
           <div className="avatar">
@@ -60,11 +69,10 @@ export default function EstudiantesDashboard() {
         </div>
       </div>
 
-      {/* SELECTOR DE PERIODO */}
       <div className="card">
         <p>Selecciona un período:</p>
         <div className="pills">
-          {periodos.map((p) => (
+          {periodos.map(p => (
             <button
               key={p}
               className={periodo === p ? "pill activo" : "pill"}
@@ -76,45 +84,37 @@ export default function EstudiantesDashboard() {
         </div>
       </div>
 
-      {/* TABLA DE NOTAS */}
       <div className="card">
         <h3>Notas — {periodo}</h3>
         <table className="tabla">
           <thead>
             <tr>
               <th>Materia</th>
-              <th>Nota 1</th>
-              <th>Nota 2</th>
-              <th>Nota 3</th>
-              <th>Promedio</th>
+              <th>Nota</th>
               <th>Estado</th>
             </tr>
           </thead>
           <tbody>
-            {notasDelPeriodo.map((nota) => {
-              const materia = MATERIAS.find((m) => m.id === nota.materia_id);
-              const promedio = calcularPromedio(nota.nota1, nota.nota2, nota.nota3);
-              const aprobada = promedio >= 3.0;
+            {notasDelPeriodo.map(nota => {
+              const materia = subjects.find(m => m.id === nota.subjectId)
+              const aprobada = nota.value >= 3.0
 
               return (
                 <tr key={nota.id}>
-                  <td>{materia?.nombre}</td>
-                  <td>{nota.nota1}</td>
-                  <td>{nota.nota2}</td>
-                  <td>{nota.nota3}</td>
-                  <td><strong>{promedio}</strong></td>
+                  <td>{materia?.subjectName || `Materia #${nota.subjectId}`}</td>
+                  <td><strong>{nota.value.toFixed(2)}</strong></td>
                   <td>
                     <span className={aprobada ? "badge verde" : "badge rojo"}>
                       {aprobada ? "Aprobada" : "Reprobada"}
                     </span>
                   </td>
                 </tr>
-              );
+              )
             })}
           </tbody>
         </table>
       </div>
 
     </div>
-  );
+  )
 }

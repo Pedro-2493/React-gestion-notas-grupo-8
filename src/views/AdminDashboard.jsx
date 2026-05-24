@@ -1,4 +1,7 @@
-import { useUsuarios } from '../context/UsuariosContext'
+import { useState, useEffect } from 'react'
+import { studentService } from '../api/students'
+import { teacherService } from '../api/teachers'
+import { subjectService } from '../api/subjects'
 import './AdminDashboard.css'
 
 const ADMIN = {
@@ -9,10 +12,30 @@ const ADMIN = {
 }
 
 function AdminDashboard() {
-  const { usuarios } = useUsuarios()
+  const [students, setStudents] = useState([])
+  const [teachers, setTeachers] = useState([])
+  const [subjects, setSubjects] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  const docentes = usuarios.filter(u => u.rol === 'docente')
-  const estudiantes = usuarios.filter(u => u.rol === 'estudiante')
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const [studentsData, teachersData, subjectsData] = await Promise.all([
+          studentService.listar(),
+          teacherService.listar(),
+          subjectService.listar(),
+        ])
+        setStudents(studentsData)
+        setTeachers(teachersData)
+        setSubjects(subjectsData)
+      } catch {
+        console.warn('No se pudo conectar con el backend, usando datos locales')
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadData()
+  }, [])
 
   return (
     <div className="admin-pagina">
@@ -32,28 +55,28 @@ function AdminDashboard() {
         <div className="admin-stat-card">
           <span className="stat-icon">👥</span>
           <div>
-            <p className="stat-numero">{usuarios.length}</p>
+            <p className="stat-numero">{loading ? '...' : students.length + teachers.length}</p>
             <p className="stat-label">Total Usuarios</p>
           </div>
         </div>
         <div className="admin-stat-card">
           <span className="stat-icon">👨‍🏫</span>
           <div>
-            <p className="stat-numero">{docentes.length}</p>
+            <p className="stat-numero">{loading ? '...' : teachers.length}</p>
             <p className="stat-label">Docentes</p>
           </div>
         </div>
         <div className="admin-stat-card">
           <span className="stat-icon">👩‍🎓</span>
           <div>
-            <p className="stat-numero">{estudiantes.length}</p>
+            <p className="stat-numero">{loading ? '...' : students.length}</p>
             <p className="stat-label">Estudiantes</p>
           </div>
         </div>
         <div className="admin-stat-card">
           <span className="stat-icon">📚</span>
           <div>
-            <p className="stat-numero">3</p>
+            <p className="stat-numero">{loading ? '...' : subjects.length}</p>
             <p className="stat-label">Materias</p>
           </div>
         </div>
@@ -61,29 +84,31 @@ function AdminDashboard() {
 
       <div className="admin-grid-2">
         <div className="admin-card">
-          <h3>Usuarios recientes</h3>
-          <table className="admin-tabla">
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Email</th>
-                <th>Rol</th>
-              </tr>
-            </thead>
-            <tbody>
-              {usuarios.slice(0, 4).map(u => (
-                <tr key={u.id}>
-                  <td>{u.nombre}</td>
-                  <td>{u.email}</td>
-                  <td>
-                    <span className={`admin-badge ${u.rol === 'docente' ? 'badge-docente' : 'badge-estudiante'}`}>
-                      {u.rol}
-                    </span>
-                  </td>
+          <h3>Estudiantes recientes</h3>
+          {loading ? (
+            <p className="stat-label">Cargando...</p>
+          ) : students.length === 0 ? (
+            <p className="stat-label">No hay estudiantes registrados</p>
+          ) : (
+            <table className="admin-tabla">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Email</th>
+                  <th>Documento</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {students.slice(0, 4).map(s => (
+                  <tr key={s.id}>
+                    <td>{s.studentName}</td>
+                    <td>{s.email}</td>
+                    <td>{s.document}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
 
         <div className="admin-card">
