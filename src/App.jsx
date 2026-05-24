@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./views/Home";
@@ -14,22 +14,34 @@ import WhatsAppButton from "./components/WhatsAppButton";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
 
-const App = () => {
+function AppContent() {
+  const location = useLocation()
+  const hideNavbar = location.pathname === '/docentes' || location.pathname === '/estudiantes'
+
   return (
-    <AuthProvider>
-    <UsuariosProvider>
-      <Navbar />
+    <>
+      {!hideNavbar && <Navbar />}
+      {hideNavbar && <Footer simple />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
         <Route path="/contacto" element={<Contacto />} />
         <Route path="/docentes" element={<ProtectedRoute roles={['docente']}><Docentes /></ProtectedRoute>} />
         <Route path="/estudiantes" element={<ProtectedRoute roles={['estudiante']}><EstudiantesDashboard /></ProtectedRoute>} />
-        <Route path="/usuarios" element={<UsuariosList />} />
+        <Route path="/admin/usuarios" element={<ProtectedRoute roles={['administrador']}><UsuariosList /></ProtectedRoute>} />
         <Route path="/admin" element={<ProtectedRoute roles={['administrador']}><AdminDashboard /></ProtectedRoute>} />
       </Routes>
-      <Footer />
+      {!hideNavbar && <Footer />}
       <WhatsAppButton />
+    </>
+  )
+}
+
+const App = () => {
+  return (
+    <AuthProvider>
+    <UsuariosProvider>
+      <AppContent />
     </UsuariosProvider>
     </AuthProvider>
   );

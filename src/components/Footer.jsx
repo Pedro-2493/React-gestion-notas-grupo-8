@@ -1,7 +1,29 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import styles from "./Footer.module.css";
 
-function Footer() {
+function Footer({ simple }) {
+  const { user, logout } = useAuth()
+  const navigate = useNavigate()
+
+  function handleLogout() {
+    logout()
+    navigate('/')
+  }
+
+  if (simple) {
+    return (
+      <div className={styles.topBar}>
+        <a href="/" className={styles.topLink}>Inicio</a>
+        {user && (
+          <button onClick={handleLogout} className={styles.topLogout}>
+            Cerrar Sesión
+          </button>
+        )}
+      </div>
+    )
+  }
+
   return (
     <footer className={styles.footer}>
       <section className={styles.container}>

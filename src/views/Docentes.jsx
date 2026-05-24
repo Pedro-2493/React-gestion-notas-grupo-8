@@ -1,34 +1,58 @@
 import { useState, useEffect } from "react"
+import { useAuth } from "../context/AuthContext"
 import { teacherService } from "../api/teachers"
+import { studentService } from "../api/students"
+import { gradeService } from "../api/grades"
+import { attendanceService } from "../api/attendance"
+import { subjectService } from "../api/subjects"
 import styles from "./Docentes.module.css"
 
+const TABS = [
+  { id: 'notas', label: 'Notas' },
+  { id: 'alumnos', label: 'Alumnos' },
+  { id: 'asistencia', label: 'Asistencias' },
+]
+
 function Docentes() {
-  const [teachers, setTeachers] = useState([])
+  const { user } = useAuth()
+  const [teacher, setTeacher] = useState(null)
+  const [students, setStudents] = useState([])
+  const [subjects, setSubjects] = useState([])
+  const [grades, setGrades] = useState([])
+  const [attendance, setAttendance] = useState([])
+  const [activeTab, setActiveTab] = useState('notas')
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    async function loadTeachers() {
+    async function load() {
       try {
-        const data = await teacherService.listar()
-        setTeachers(data)
-      } catch {
-        console.warn('Usando datos de prueba para docentes')
-        setTeachers([
-          { id: 1, teacherName: "Steven Wattson", email: "steven1000@uniedu.co" },
-          { id: 2, teacherName: "Ana Torres", email: "ana@uniedu.co" },
+        const [teachersData, studentsData, subjectsData, gradesData, attendanceData] = await Promise.all([
+          teacherService.listar(),
+          studentService.listar(),
+          subjectService.listar(),
+          gradeService.listar(),
+          attendanceService.listar(),
         ])
+        const me = teachersData.find(t => t.email === user?.email)
+        setTeacher(me || teachersData[0] || null)
+        setStudents(studentsData)
+        setSubjects(subjectsData)
+        setGrades(gradesData)
+        setAttendance(attendanceData)
+      } catch {
+        console.warn("No se pudo conectar con el backend")
       } finally {
         setLoading(false)
       }
     }
-    loadTeachers()
-  }, [])
+    load()
+  }, [user])
 
   if (loading) {
     return (
       <main>
         <div className={styles.container}>
-          <p style={{ color: '#4a7a9b', textAlign: 'center', padding: '2rem' }}>Cargando docentes...</p>
+          <p style={{ color: '#4a7a9b', textAlign: 'center', padding: '2rem' }}>Cargando...</p>
         </div>
       </main>
     )
@@ -39,37 +63,131 @@ function Docentes() {
       <div className={styles.container}>
         <aside className={styles.navbar}>
           <ul className={styles.navbar__list}>
-            <li><a href="#notas">Notas</a></li>
-            <li><a href="#asistencia">Asistencia</a></li>
-            <li><a href="#reportes">Reportes</a></li>
-            <li><a href="#calendario">Calendario</a></li>
+            {TABS.map(tab => (
+              <li key={tab.id}>
+                <button
+                  className={`${styles.navBtn} ${activeTab === tab.id ? styles.navBtnActive : ''}`}
+                  onClick={() => setActiveTab(tab.id)}
+                >
+                  {tab.label}
+                </button>
+              </li>
+            ))}
           </ul>
         </aside>
 
         <section className={styles.main}>
-          {teachers.map(teacher => (
-            <div key={teacher.id} className={styles.informationBlock}>
-              <h2>Información Docente</h2>
-              <div className={styles.informationBlockTeacher}>
-                <div>
-                  <p>Nombre: {teacher.teacherName}</p>
-                  <p>Cédula: {teacher.id ? `1000${teacher.id}${teacher.id * 7}`.slice(0, 10) : 'N/A'}</p>
-                  <p>Correo: {teacher.email}</p>
-                </div>
-                <div>
-                  <img
-                    className={styles.informationBlockUserIcon}
-                    src="/evalix.png"
-                    alt="Usuario"
-                  />
-                  <a href="#actualizar">Actualizar Datos</a>
-                </div>
-              </div>
+          {teacher && (
+            <div className={styles.informationBlock}>
+              <h2>Panel Docente</h2>
+              <p style={{ color: '#4a7a9b' }}>{teacher.teacherName} — {teacher.email}</p>
             </div>
-          ))}
+          )}
 
-          {teachers.length === 0 && (
-            <p style={{ color: '#4a7a9b', textAlign: 'center' }}>No hay docentes registrados</p>
+          {activeTab === 'notas' && (
+            <div className={styles.informationBlock}>
+              <h3>Notas de Alumnos</h3>
+              {grades.length === 0 ? (
+                <p style={{ color: '#4a7a9b' }}>No hay notas registradas.</p>
+              ) : (
+                <div className={styles.tableWrap}>
+                  <table className={styles.tabla}>
+                    <thead>
+                      <tr>
+                        <th>Estudiante</th>
+                        <th>Materia</th>
+                        <th>Nota</th>
+                        <th>Periodo</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {grades.map(g => {
+                        const student = students.find(s => s.id === g.student?.id || g.studentId)
+                        const subject = subjects.find(s => s.id === g.subject?.id || g.subjectId)
+                        return (
+                          <tr key={g.id}>
+                            <td>{student?.studentName || 'N/A'}</td>
+                            <td>{subject?.subjectName || 'N/A'}</td>
+                            <td><strong>{g.value?.toFixed(2)}</strong></td>
+                            <td>{g.period}</td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeTab === 'alumnos' && (
+            <div className={styles.informationBlock}>
+              <h3>Alumnos</h3>
+              {students.length === 0 ? (
+                <p style={{ color: '#4a7a9b' }}>No hay alumnos registrados.</p>
+              ) : (
+                <div className={styles.tableWrap}>
+                  <table className={styles.tabla}>
+                    <thead>
+                      <tr>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Documento</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {students.map(s => (
+                        <tr key={s.id}>
+                          <td>{s.studentName}</td>
+                          <td>{s.email}</td>
+                          <td>{s.document || 'N/A'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeTab === 'asistencia' && (
+            <div className={styles.informationBlock}>
+              <h3>Asistencias</h3>
+              {attendance.length === 0 ? (
+                <p style={{ color: '#4a7a9b' }}>No hay registros de asistencia.</p>
+              ) : (
+                <div className={styles.tableWrap}>
+                  <table className={styles.tabla}>
+                    <thead>
+                      <tr>
+                        <th>Estudiante</th>
+                        <th>Materia</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {attendance.map(a => {
+                        const student = students.find(s => s.id === a.student?.id || a.studentId)
+                        const subject = subjects.find(s => s.id === a.subject?.id || a.subjectId)
+                        return (
+                          <tr key={a.id}>
+                            <td>{student?.studentName || 'N/A'}</td>
+                            <td>{subject?.subjectName || 'N/A'}</td>
+                            <td>{a.date}</td>
+                            <td>
+                              <span className={`${styles.badge} ${a.status === 'PRESENTE' ? styles.badgeVerde : a.status === 'AUSENTE' ? styles.badgeRojo : styles.badgeAmarillo}`}>
+                                {a.status}
+                              </span>
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
           )}
         </section>
       </div>

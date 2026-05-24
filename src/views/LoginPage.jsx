@@ -1,48 +1,68 @@
 import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { studentService } from '../api/students'
+import { teacherService } from '../api/teachers'
+import { adminService } from '../api/admins'
 import styles from './LoginPage.module.css'
 import Logo from "../images/evalix.png"
 
-// Mock de usuarios para simular autenticación
 const USUARIOS_MOCK = [
-  { email: 'steven@uniedu.co', password: '1234', rol: 'docente' },
-  { email: 'luisa@uniedu.co', password: '1234', rol: 'estudiante' },
+  { email: 'c.mendoza@cesde.edu.co', password: '1234', rol: 'docente' },
+  { email: 'v.torres@cesde.edu.co', password: '1234', rol: 'estudiante' },
   { email: 'admin@evalix.co', password: '1234', rol: 'administrador' },
 ]
+
+async function verificarUsuario(email, password, rol) {
+  try {
+    if (rol === 'administrador') {
+      const admin = await adminService.buscarPorEmail(email)
+      if (admin && admin.password === password) return admin
+    }
+    if (rol === 'estudiante') {
+      const students = await studentService.listar()
+      const found = students.find(s => s.email === email)
+      if (found) return found
+    }
+    if (rol === 'docente') {
+      const teachers = await teacherService.listar()
+      const found = teachers.find(t => t.email === email)
+      if (found) return found
+    }
+  } catch {
+    console.warn('Backend no disponible, usando mock')
+  }
+
+  const mock = USUARIOS_MOCK.find(
+    u => u.email === email && u.password === password && u.rol === rol
+  )
+  return mock || null
+}
 
 function LoginPage() {
   const [searchParams] = useSearchParams()
   const rolParam = searchParams.get('rol') || ''
 
-  // ── Estado del formulario ──────────────────────────
   const [form, setForm] = useState({
     email: '',
     password: '',
     rol: rolParam,
   })
-
-  // ── Estado de error y carga ────────────────────────
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
   const { login: authLogin } = useAuth()
   const navigate = useNavigate()
 
-  // ── Handler genérico: actualiza el campo que cambió ─
-  // Kevin: este es el patrón de formulario controlado.
-  // Un solo onChange sirve para TODOS los inputs.
   function handleChange(e) {
     const { name, value } = e.target
     setForm(prev => ({ ...prev, [name]: value }))
-    setError('') // limpia el error al escribir
+    setError('')
   }
 
-  // ── Submit ──────────────────────────────────────────
-  function handleSubmit(e) {
-    e.preventDefault() // evita que la página se recargue
+  async function handleSubmit(e) {
+    e.preventDefault()
 
-    // Validación básica
     if (!form.rol) {
       setError('Selecciona un rol para continuar.')
       return
@@ -54,32 +74,23 @@ function LoginPage() {
 
     setLoading(true)
 
-    // Simulación de autenticación con mock data
-    const usuario = USUARIOS_MOCK.find(
-      u => u.email === form.email &&
-        u.password === form.password &&
-        u.rol === form.rol
-    )
+    const usuario = await verificarUsuario(form.email, form.password, form.rol)
 
-    setTimeout(() => {
-      setLoading(false)
-      if (usuario) {
-        authLogin({ email: usuario.email, rol: usuario.rol })
-        // Redirige según el rol
-        if (form.rol === 'docente') navigate('/docentes')
-        if (form.rol === 'estudiante') navigate('/estudiantes')
-        if (form.rol === 'administrador') navigate('/admin')
-      } else {
-        setError('Credenciales incorrectas. Verifica tus datos.')
-      }
-    }, 800) // simula el delay de una petición real
+    setLoading(false)
+    if (usuario) {
+      authLogin({ email: usuario.email, rol: form.rol })
+      if (form.rol === 'docente') navigate('/docentes')
+      if (form.rol === 'estudiante') navigate('/estudiantes')
+      if (form.rol === 'administrador') navigate('/admin')
+    } else {
+      setError('Credenciales incorrectas. Verifica tus datos.')
+    }
   }
 
   return (
     <div className={styles.page}>
       <div className={styles.card}>
 
-        {/* Logo */}
         <img
           src={Logo}
           alt="Evalix"
@@ -89,7 +100,6 @@ function LoginPage() {
 
         <form onSubmit={handleSubmit} className={styles.form}>
 
-          {/* ── ROL ── */}
           <div className={styles.grupo}>
             <label htmlFor="rol">Rol</label>
             <select
@@ -106,7 +116,6 @@ function LoginPage() {
             </select>
           </div>
 
-          {/* ── EMAIL ── */}
           <div className={styles.grupo}>
             <label htmlFor="email">Correo electrónico</label>
             <input
@@ -115,13 +124,12 @@ function LoginPage() {
               type="email"
               value={form.email}
               onChange={handleChange}
-              placeholder="usuario@uniedu.co"
+              placeholder="correo@cesde.edu.co"
               className={styles.input}
               autoComplete="email"
             />
           </div>
 
-          {/* ── CONTRASEÑA ── */}
           <div className={styles.grupo}>
             <label htmlFor="password">Contraseña</label>
             <input
@@ -136,12 +144,10 @@ function LoginPage() {
             />
           </div>
 
-          {/* ── ERROR ── */}
           {error && (
             <p className={styles.error}>{error}</p>
           )}
 
-          {/* ── SUBMIT ── */}
           <button
             type="submit"
             className={styles.boton}
@@ -150,11 +156,11 @@ function LoginPage() {
             {loading ? 'Verificando...' : 'Iniciar sesión'}
           </button>
 
-          {/* ── CREDENCIALES DE PRUEBA ── */}
           <div className={styles.ayuda}>
             <p>Credenciales de prueba:</p>
-            <code>docente → steven@uniedu.co / 1234</code>
-            <code>estudiante → luisa@uniedu.co / 1234</code>
+            <code>docente → c.mendoza@cesde.edu.co / 1234</code>
+            <code>estudiante → v.torres@cesde.edu.co / 1234</code>
+            <code>admin → admin@evalix.co / 1234</code>
           </div>
 
         </form>

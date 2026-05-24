@@ -88,17 +88,74 @@
   object-fit: cover;
 }
 
-.containerPrincipal {
-  background: #0f172a;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 0.5rem;
-  padding: 2rem;
-  text-align: center;
+.navBtn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  width: 100%;
+  text-align: left;
+  transition: color 0.2s;
 }
 
-.containerPrincipal img {
-  max-width: 100%;
-  height: auto;
+.navBtn:hover {
+  color: #22d3ee;
+}
+
+.navBtnActive {
+  color: #22d3ee;
+  font-weight: 700;
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.tabla th {
+  text-align: left;
+  padding: 10px 12px;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #475569;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tabla td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: #e2e8f0;
+}
+
+.badge {
+  padding: 3px 10px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.badgeVerde {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.badgeRojo {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.badgeAmarillo {
+  background: rgba(234, 179, 8, 0.15);
+  color: #eab308;
 }
 
 @media (max-width: 768px) {
