@@ -8,7 +8,7 @@ import LoginPage from "./views/LoginPage";
 import UsuariosList from "./views/UsuariosList";
 import { UsuariosProvider } from "./context/UsuariosContext";
 import EstudiantesDashboard from "./views/EstudiantesDashboard";
-
+import WhatsAppButton from "./components/WhatsAppButton";
 
 const App = () => {
   return (
@@ -23,6 +23,7 @@ const App = () => {
         <Route path="/usuarios" element={<UsuariosList />} />
       </Routes>
       <Footer />
+      <WhatsAppButton />
     </UsuariosProvider>
   );
 };

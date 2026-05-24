@@ -1,164 +1,255 @@
-/* HERO*/ 
 .hero {
-  min-height: 60vh;
+  position: relative;
+  min-height: 80vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 4rem 2rem;
+  padding: 6rem 2rem;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 22, 40, 0.75) 0%,
+    rgba(10, 22, 40, 0.5) 50%,
+    rgba(10, 22, 40, 0.85) 100%
+  );
+  pointer-events: none;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+}
+
+.heroTag {
+  display: inline-block;
+  padding: 0.4rem 1.2rem;
+  border: 1px solid rgba(0, 245, 255, 0.3);
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  color: #00f5ff;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
 }
 
 .heroTitle {
   font-family: 'Orbitron', sans-serif;
-  font-size: clamp(1.8rem, 5vw, 3rem);
-  color: #00f5ff;
-  text-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: #ffffff;
+  line-height: 1.2;
   margin-bottom: 1rem;
+}
+
+.heroTitleAccent {
+  color: #00f5ff;
 }
 
 .heroSub {
   font-size: 1.1rem;
   color: #4a7a9b;
-  letter-spacing: 2px;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto 2rem;
 }
 
-/* CARACTERÍSTICAS*/
+.section {
+  padding: 5rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.sectionAlt {
+  background: rgba(13, 30, 53, 0.5);
+  padding: 5rem 2rem;
+}
+
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.sectionTag {
+  display: inline-block;
+  font-size: 0.75rem;
+  color: #00f5ff;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.sectionTitle {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  color: #ffffff;
+  margin: 0;
+}
+
+.sectionTitle span {
+  color: #00f5ff;
+}
+
+.sectionDesc {
+  color: #4a7a9b;
+  font-size: 0.95rem;
+  margin-top: 0.75rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .featuresGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 3rem 2rem;
 }
 
-.featureCard {
-  background: #0a1628;
-  border: 1px solid rgba(0, 245, 255, 0.2);
-  border-radius: 12px;
-  padding: 2rem;
-  transition: transform 0.25s ease, border-color 0.25s ease;
-}
-
-.featureCard:hover {
-  transform: translateY(-6px);
-  border-color: #00f5ff;
-}
-
-.featureCard span {
-  font-size: 2rem;
-}
-
-.featureCard h3 {
-  font-family: 'Orbitron', sans-serif;
-  color: #00f5ff;
-  margin: 0.75rem 0 0.5rem;
-  font-size: 0.9rem;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-.featureCard p {
-  color: #4a7a9b;
-  font-size: 0.9rem;
-  line-height: 1.6;
-}
-/*#747bff*/
-/* TESTIMONIAL */
 .testimonial {
-  max-width: 700px;
+  max-width: 800px;
   margin: 0 auto;
-  padding: 3rem 2rem;
+  padding: 4rem 2rem;
   text-align: center;
-  border: 1px solid rgba(0, 245, 255, 0.12);
-  border-radius: 16px;
+  position: relative;
+}
+
+.testimonial::before {
+  content: '"';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 6rem;
+  color: rgba(0, 245, 255, 0.1);
+  font-family: Georgia, serif;
+  line-height: 1;
 }
 
 .testimonialText {
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   color: #94a1a7;
   font-style: italic;
-  line-height: 1.75;
-  margin-bottom: 1rem;
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+  position: relative;
 }
 
 .testimonialAuthor {
-  font-weight: bold;
-  font-size: 1rem;
+  font-weight: 700;
   color: #00f5ff;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
 }
 
-/* USUARIOS */
-.usuariosGrid {
+.rolesGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1rem;
-  max-width: 1100px;
-  margin: 3rem auto;
-  padding: 0 2rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-.usuarioCard {
-  background: #0a1628;
-  border: 1px solid rgba(0, 245, 255, 0.15);
-  border-radius: 12px;
-  padding: 1.25rem;
+.roleCard {
+  background: #0d1e35;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  transition: border-color 0.25s ease;
+  align-items: center;
+  gap: 1rem;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
-.usuarioCard:hover {
-  border-color: #00f5ff;
-}/**/
-
-.usuarioCard span:first-child {
-  font-size: 2rem;
+.roleCard:hover {
+  transform: translateY(-8px);
+  border-color: rgba(0, 245, 255, 0.3);
+  box-shadow: 0 8px 30px rgba(0, 245, 255, 0.1);
 }
 
-.usuarioCard h3 {
-  color: #e0f2fe;
-  font-size: 0.95rem;
-  margin-top: 0.5rem;
+.roleIcon {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  background: rgba(0, 245, 255, 0.06);
+  border: 1px solid rgba(0, 245, 255, 0.1);
+  transition: background 0.25s, border-color 0.25s;
 }
 
-.usuarioCard p {
+.roleCard:hover .roleIcon {
+  background: rgba(0, 245, 255, 0.1);
+  border-color: rgba(0, 245, 255, 0.25);
+}
+
+.roleTitle {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  color: #00f5ff;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.roleDesc {
   color: #4a7a9b;
-  font-size: 0.82rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 200px;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    min-height: 50vh;
+    padding: 4rem 1.5rem;
+  }
+
+  .section,
+  .sectionAlt {
+    padding: 3rem 1.5rem;
+  }
+
+  .featuresGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .rolesGrid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+  }
 }
 
 @media (max-width: 640px) {
   .hero {
     min-height: 40vh;
+    padding: 3rem 1rem;
+  }
+
+  .section,
+  .sectionAlt {
     padding: 2rem 1rem;
-  }
-
-  .heroTitle {
-    font-size: clamp(1.4rem, 6vw, 1.8rem);
-  }
-
-  .heroSub {
-    font-size: 0.95rem;
-  }
-
-  .featuresGrid {
-    padding: 2rem 1rem;
-    gap: 1rem;
   }
 
   .testimonial {
-    padding: 2rem 1rem;
-    margin: 0 1rem;
+    padding: 3rem 1rem;
   }
 
   .testimonialText {
-    font-size: 0.9rem;
-  }
-
-  .usuariosGrid {
-    padding: 0 1rem;
-    margin: 2rem auto;
+    font-size: 1rem;
   }
 }

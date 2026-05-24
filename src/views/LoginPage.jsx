@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import styles from './LoginPage.module.css'
 import Logo from "../images/evalix.png"
 
@@ -11,11 +11,14 @@ const USUARIOS_MOCK = [
 ]
 
 function LoginPage() {
+  const [searchParams] = useSearchParams()
+  const rolParam = searchParams.get('rol') || ''
+
   // ── Estado del formulario ──────────────────────────
   const [form, setForm] = useState({
     email: '',
     password: '',
-    rol: '',
+    rol: rolParam,
   })
 
   // ── Estado de error y carga ────────────────────────
