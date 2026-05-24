@@ -1,119 +1,156 @@
 import { useState, useEffect } from "react"
+import { studentService } from "../api/students"
 import { gradeService } from "../api/grades"
 import { subjectService } from "../api/subjects"
 import "./EstudiantesDashboard.css"
 
-const ESTUDIANTE = {
-  nombre: "Melina",
-  apellido: "Ramirez",
-  email: "melirez@evalix.edu.co",
-  documento: "1002345678",
-  grupo: "EV0001",
-  id: 1,
-}
-
-const MATERIAS_MOCK = [
-  { id: 101, subjectName: "Cálculo Diferencial" },
-  { id: 102, subjectName: "Estructuras de Datos" },
-  { id: 103, subjectName: "Base de Datos I" },
-  { id: 104, subjectName: "Inglés Técnico" },
-]
-
-const NOTAS_MOCK = [
-  { id: 1, subjectId: 101, period: "2024-1", value: 3.8 },
-  { id: 2, subjectId: 102, period: "2024-1", value: 3.5 },
-  { id: 3, subjectId: 103, period: "2024-1", value: 4.0 },
-  { id: 4, subjectId: 104, period: "2024-1", value: 4.5 },
-  { id: 5, subjectId: 101, period: "2024-2", value: 4.0 },
-  { id: 6, subjectId: 102, period: "2024-2", value: 3.9 },
-]
-
 export default function EstudiantesDashboard() {
-  const [subjects, setSubjects] = useState(MATERIAS_MOCK)
-  const [notas, setNotas] = useState(NOTAS_MOCK)
-  const [periodo, setPeriodo] = useState("2024-1")
+  const [students, setStudents] = useState([])
+  const [subjects, setSubjects] = useState([])
+  const [selectedStudent, setSelectedStudent] = useState(null)
+  const [notas, setNotas] = useState([])
+  const [periodo, setPeriodo] = useState("")
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    async function loadData() {
+    async function load() {
       try {
-        const [subjectsData, gradesData] = await Promise.all([
+        const [studentsData, subjectsData] = await Promise.all([
+          studentService.listar(),
           subjectService.listar(),
-          gradeService.porEstudiante(ESTUDIANTE.id),
         ])
-        if (subjectsData.length) setSubjects(subjectsData.map(s => ({ id: s.id, subjectName: s.subjectName })))
-        if (gradesData.length) setNotas(gradesData.map(g => ({ id: g.id, subjectId: g.subjectId, period: g.period, value: g.value })))
+        setStudents(studentsData)
+        setSubjects(subjectsData)
       } catch {
-        console.warn('Usando datos de prueba para notas')
+        console.warn("No se pudo conectar con el backend")
+      } finally {
+        setLoading(false)
       }
     }
-    loadData()
+    load()
   }, [])
+
+  async function handleSelectStudent(student) {
+    setSelectedStudent(student)
+    setNotas([])
+    setPeriodo("")
+    try {
+      const gradesData = await gradeService.porEstudiante(student.id)
+      const mapped = gradesData.map(g => ({
+        id: g.id,
+        subjectId: g.subjectId,
+        period: g.period,
+        value: g.value,
+      }))
+      setNotas(mapped)
+      const periods = [...new Set(mapped.map(n => n.period))]
+      if (periods.length) setPeriodo(periods[0])
+    } catch {
+      console.warn("Sin notas en el backend para este estudiante")
+    }
+  }
 
   const periodos = [...new Set(notas.map(n => n.period))]
   const notasDelPeriodo = notas.filter(n => n.period === periodo)
+
+  if (loading) {
+    return (
+      <div className="pagina">
+        <p style={{ color: '#4a7a9b' }}>Cargando estudiantes...</p>
+      </div>
+    )
+  }
 
   return (
     <div className="pagina">
 
       <div className="card">
-        <div className="perfil">
-          <div className="avatar">
-            {ESTUDIANTE.nombre[0]}{ESTUDIANTE.apellido[0]}
+        <h2>Estudiantes</h2>
+        {students.length === 0 ? (
+          <p style={{ color: '#4a7a9b' }}>No hay estudiantes registrados en el sistema.</p>
+        ) : (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '12px' }}>
+            {students.map(s => (
+              <button
+                key={s.id}
+                className={`pill ${selectedStudent?.id === s.id ? 'activo' : ''}`}
+                onClick={() => handleSelectStudent(s)}
+              >
+                {s.studentName}
+              </button>
+            ))}
           </div>
-          <div>
-            <h2>{ESTUDIANTE.nombre} {ESTUDIANTE.apellido}</h2>
-            <p>Documento: {ESTUDIANTE.documento}</p>
-            <p>Grupo: {ESTUDIANTE.grupo}</p>
-            <p>Email: {ESTUDIANTE.email}</p>
+        )}
+      </div>
+
+      {selectedStudent && (
+        <>
+          <div className="card">
+            <div className="perfil">
+              <div className="avatar">
+                {selectedStudent.studentName.charAt(0)}
+              </div>
+              <div>
+                <h2>{selectedStudent.studentName}</h2>
+                <p>Documento: {selectedStudent.document || 'N/A'}</p>
+                <p>Email: {selectedStudent.email}</p>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div className="card">
-        <p>Selecciona un período:</p>
-        <div className="pills">
-          {periodos.map(p => (
-            <button
-              key={p}
-              className={periodo === p ? "pill activo" : "pill"}
-              onClick={() => setPeriodo(p)}
-            >
-              {p}
-            </button>
-          ))}
-        </div>
-      </div>
+          {notas.length > 0 && periodos.length > 0 && (
+            <div className="card">
+              <p>Selecciona un período:</p>
+              <div className="pills">
+                {periodos.map(p => (
+                  <button
+                    key={p}
+                    className={periodo === p ? "pill activo" : "pill"}
+                    onClick={() => setPeriodo(p)}
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
-      <div className="card">
-        <h3>Notas — {periodo}</h3>
-        <table className="tabla">
-          <thead>
-            <tr>
-              <th>Materia</th>
-              <th>Nota</th>
-              <th>Estado</th>
-            </tr>
-          </thead>
-          <tbody>
-            {notasDelPeriodo.map(nota => {
-              const materia = subjects.find(m => m.id === nota.subjectId)
-              const aprobada = nota.value >= 3.0
+          <div className="card">
+            <h3>Notas {periodo ? `— ${periodo}` : ''}</h3>
+            {notasDelPeriodo.length === 0 ? (
+              <p style={{ color: '#4a7a9b' }}>Este estudiante no tiene notas registradas.</p>
+            ) : (
+              <table className="tabla">
+                <thead>
+                  <tr>
+                    <th>Materia</th>
+                    <th>Nota</th>
+                    <th>Estado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {notasDelPeriodo.map(nota => {
+                    const materia = subjects.find(m => m.id === nota.subjectId)
+                    const aprobada = nota.value >= 3.0
 
-              return (
-                <tr key={nota.id}>
-                  <td>{materia?.subjectName || `Materia #${nota.subjectId}`}</td>
-                  <td><strong>{nota.value.toFixed(2)}</strong></td>
-                  <td>
-                    <span className={aprobada ? "badge verde" : "badge rojo"}>
-                      {aprobada ? "Aprobada" : "Reprobada"}
-                    </span>
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      </div>
+                    return (
+                      <tr key={nota.id}>
+                        <td>{materia?.subjectName || `Materia #${nota.subjectId}`}</td>
+                        <td><strong>{nota.value.toFixed(2)}</strong></td>
+                        <td>
+                          <span className={aprobada ? "badge verde" : "badge rojo"}>
+                            {aprobada ? "Aprobada" : "Reprobada"}
+                          </span>
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            )}
+          </div>
+        </>
+      )}
 
     </div>
   )
