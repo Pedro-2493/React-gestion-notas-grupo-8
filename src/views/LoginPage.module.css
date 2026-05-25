@@ -137,6 +137,16 @@
   gap: 0.3rem;
 }
 
+.link {
+  color: #22d3ee;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
 .ayuda p {
   color: #a8d8e8;
   font-size: 0.78rem;

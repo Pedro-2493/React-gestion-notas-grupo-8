@@ -118,11 +118,11 @@ function AdminDashboard() {
               <span>👥</span>
               Gestionar Usuarios
             </a>
-            <a href="/docentes" className="admin-btn">
+            <a href="/admin/docentes" className="admin-btn">
               <span>👨‍🏫</span>
               Ver Docentes
             </a>
-            <a href="/estudiantes" className="admin-btn">
+            <a href="/admin/estudiantes" className="admin-btn">
               <span>👩‍🎓</span>
               Ver Estudiantes
             </a>

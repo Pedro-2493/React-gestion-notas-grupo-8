@@ -9,10 +9,12 @@ const fieldConfig = {
     { name: 'fullName', label: 'Nombre completo', placeholder: 'Nombre completo', type: 'text' },
     { name: 'email', label: 'Email', placeholder: 'correo@cesde.edu.co', type: 'email' },
     { name: 'document', label: 'Documento de identidad', placeholder: '1234567890', type: 'text' },
+    { name: 'password', label: 'Contraseña', placeholder: '••••••••', type: 'password' },
   ],
   docente: [
     { name: 'fullName', label: 'Nombre completo', placeholder: 'Nombre completo', type: 'text' },
     { name: 'email', label: 'Email', placeholder: 'correo@cesde.edu.co', type: 'email' },
+    { name: 'password', label: 'Contraseña', placeholder: '••••••••', type: 'password' },
   ],
   administrador: [
     { name: 'fullName', label: 'Nombre completo', placeholder: 'Nombre completo', type: 'text' },
@@ -40,7 +42,7 @@ export default function AgregarUsuario({ onUsuarioCreado }) {
 
   async function handleSubmit(e) {
     e.preventDefault()
-    if (!formulario.fullName || !formulario.email) return
+    if (!formulario.fullName || !formulario.email || !formulario.password) return
 
     try {
       if (formulario.rol === 'estudiante') {
@@ -49,14 +51,15 @@ export default function AgregarUsuario({ onUsuarioCreado }) {
           studentName: formulario.fullName,
           email: formulario.email,
           document: formulario.document,
+          password: formulario.password,
         })
       } else if (formulario.rol === 'docente') {
         await teacherService.crear({
           teacherName: formulario.fullName,
           email: formulario.email,
+          password: formulario.password,
         })
       } else if (formulario.rol === 'administrador') {
-        if (!formulario.password) return
         await adminService.crear({
           adminName: formulario.fullName,
           email: formulario.email,

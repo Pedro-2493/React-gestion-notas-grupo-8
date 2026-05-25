@@ -1,43 +1,9 @@
 import { useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { studentService } from '../api/students'
-import { teacherService } from '../api/teachers'
-import { adminService } from '../api/admins'
+import api from '../api/client'
 import styles from './LoginPage.module.css'
 import Logo from "../images/evalix.png"
-
-const USUARIOS_MOCK = [
-  { email: 'c.mendoza@cesde.edu.co', password: '1234', rol: 'docente' },
-  { email: 'v.torres@cesde.edu.co', password: '1234', rol: 'estudiante' },
-  { email: 'admin@evalix.co', password: '1234', rol: 'administrador' },
-]
-
-async function verificarUsuario(email, password, rol) {
-  try {
-    if (rol === 'administrador') {
-      const admin = await adminService.buscarPorEmail(email)
-      if (admin && admin.password === password) return admin
-    }
-    if (rol === 'estudiante') {
-      const students = await studentService.listar()
-      const found = students.find(s => s.email === email)
-      if (found) return found
-    }
-    if (rol === 'docente') {
-      const teachers = await teacherService.listar()
-      const found = teachers.find(t => t.email === email)
-      if (found) return found
-    }
-  } catch {
-    console.warn('Backend no disponible, usando mock')
-  }
-
-  const mock = USUARIOS_MOCK.find(
-    u => u.email === email && u.password === password && u.rol === rol
-  )
-  return mock || null
-}
 
 function LoginPage() {
   const [searchParams] = useSearchParams()
@@ -74,16 +40,27 @@ function LoginPage() {
 
     setLoading(true)
 
-    const usuario = await verificarUsuario(form.email, form.password, form.rol)
+    try {
+      const res = await api.post('/auth/login', {
+        email: form.email,
+        password: form.password,
+        rol: form.rol,
+      })
 
-    setLoading(false)
-    if (usuario) {
-      authLogin({ email: usuario.email, rol: form.rol })
+      authLogin(res.token, {
+        email: res.email,
+        rol: res.rol,
+        id: res.id,
+        nombre: res.nombre,
+      })
+
       if (form.rol === 'docente') navigate('/docentes')
-      if (form.rol === 'estudiante') navigate('/estudiantes')
-      if (form.rol === 'administrador') navigate('/admin')
-    } else {
+      else if (form.rol === 'estudiante') navigate('/estudiantes')
+      else if (form.rol === 'administrador') navigate('/admin')
+    } catch {
       setError('Credenciales incorrectas. Verifica tus datos.')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -157,9 +134,10 @@ function LoginPage() {
           </button>
 
           <div className={styles.ayuda}>
+            <p>¿No tienes cuenta? <Link to="/register" className={styles.link}>Regístrate aquí</Link></p>
             <p>Credenciales de prueba:</p>
-            <code>docente → c.mendoza@cesde.edu.co / 1234</code>
-            <code>estudiante → v.torres@cesde.edu.co / 1234</code>
+            <code>docente → steven@uniedu.co / 1234</code>
+            <code>estudiante → luisa@uniedu.co / 1234</code>
             <code>admin → admin@evalix.co / 1234</code>
           </div>
 
