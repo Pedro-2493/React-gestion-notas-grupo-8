@@ -36,10 +36,6 @@ function Footer({ simple }) {
           Agenda una demo gratuita y descubre cómo Evalix puede ayudarte.
         </p>
 
-        <a href="/registro" className={styles.button}>
-          Agendar Demo
-        </a>
-
         <p className={styles.copy}>
           © 2026 Evalix. Todos los derechos reservados.
         </p>

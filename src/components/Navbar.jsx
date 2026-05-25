@@ -36,7 +36,6 @@ function Navbar() {
         )}
         {!user && <Link to="/login" className={styles.navLink}>Ingresar</Link>}
         <Link to="/contacto" className={styles.navLink}>Contacto</Link>
-        {user?.rol === 'administrador' && <Link to="/admin/usuarios" className={styles.navLink}>Registrarse</Link>}
         {user && (
           <button onClick={handleLogout} className={styles.logoutBtn}>
             Cerrar Sesión

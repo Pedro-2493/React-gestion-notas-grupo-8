@@ -21,7 +21,7 @@ function AdminEstudiantes() {
   }, [])
 
   return (
-    <div className="admin-pagina">
+      <div className="admin-pagina">
       <div className="admin-header">
         <h2>Estudiantes</h2>
         <p>Lista completa de estudiantes registrados</p>

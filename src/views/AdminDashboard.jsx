@@ -37,7 +37,7 @@ function AdminDashboard() {
     loadData()
   }, [])
 
-  return (
+    return (
     <div className="admin-pagina">
 
       <div className="admin-header">

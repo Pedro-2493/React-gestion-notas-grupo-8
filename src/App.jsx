@@ -5,7 +5,6 @@ import Home from "./views/Home";
 import Contacto from "./views/Contacto";
 import Docentes from "./views/Docentes";
 import LoginPage from "./views/LoginPage";
-import RegisterPage from "./views/RegisterPage";
 import UsuariosList from "./views/UsuariosList";
 import { UsuariosProvider } from "./context/UsuariosContext";
 import { AuthProvider } from "./context/AuthContext";
@@ -28,7 +27,6 @@ function AppContent() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
-        <Route path="/register" element={<RegisterPage />} />
         <Route path="/contacto" element={<Contacto />} />
         <Route path="/docentes" element={<ProtectedRoute roles={['docente']}><Docentes /></ProtectedRoute>} />
         <Route path="/estudiantes" element={<ProtectedRoute roles={['estudiante']}><EstudiantesDashboard /></ProtectedRoute>} />

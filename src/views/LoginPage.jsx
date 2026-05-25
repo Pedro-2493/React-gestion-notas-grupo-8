@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, useSearchParams, Link } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import api from '../api/client'
 import styles from './LoginPage.module.css'
@@ -134,7 +134,6 @@ function LoginPage() {
           </button>
 
           <div className={styles.ayuda}>
-            <p>¿No tienes cuenta? <Link to="/register" className={styles.link}>Regístrate aquí</Link></p>
             <p>Credenciales de prueba:</p>
             <code>docente → steven@uniedu.co / 1234</code>
             <code>estudiante → luisa@uniedu.co / 1234</code>
