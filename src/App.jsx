@@ -12,6 +12,7 @@ import EstudiantesDashboard from "./views/EstudiantesDashboard";
 import AdminDashboard from "./views/AdminDashboard";
 import AdminDocentes from "./views/AdminDocentes";
 import AdminEstudiantes from "./views/AdminEstudiantes";
+import AdminMaterias from "./views/AdminMaterias";
 import WhatsAppButton from "./components/WhatsAppButton";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
@@ -33,6 +34,7 @@ function AppContent() {
         <Route path="/admin/usuarios" element={<ProtectedRoute roles={['administrador']}><UsuariosList /></ProtectedRoute>} />
         <Route path="/admin/docentes" element={<ProtectedRoute roles={['administrador']}><AdminDocentes /></ProtectedRoute>} />
         <Route path="/admin/estudiantes" element={<ProtectedRoute roles={['administrador']}><AdminEstudiantes /></ProtectedRoute>} />
+        <Route path="/admin/materias" element={<ProtectedRoute roles={['administrador']}><AdminMaterias /></ProtectedRoute>} />
         <Route path="/admin" element={<ProtectedRoute roles={['administrador']}><AdminDashboard /></ProtectedRoute>} />
       </Routes>
       {!hideNavbar && <Footer />}

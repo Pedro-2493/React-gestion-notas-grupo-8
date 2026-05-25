@@ -114,6 +114,10 @@ function AdminDashboard() {
         <div className="admin-card">
           <h3>Acciones rápidas</h3>
           <div className="admin-acciones">
+            <a href="/admin/materias" className="admin-btn">
+              <span>📚</span>
+              Gestionar Materias
+            </a>
             <a href="/admin/usuarios" className="admin-btn">
               <span>👥</span>
               Gestionar Usuarios

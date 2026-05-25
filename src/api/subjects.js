@@ -5,4 +5,6 @@ export const subjectService = {
   buscarPorId: (id) => api.get(`/subjects/${id}`),
   buscarPorNombre: (nombre) => api.get(`/subjects/buscar?nombre=${encodeURIComponent(nombre)}`),
   crear: (data) => api.post('/subjects', data),
+  actualizar: (id, data) => api.put(`/subjects/${id}`, data),
+  eliminar: (id) => api.del(`/subjects/${id}`),
 }
