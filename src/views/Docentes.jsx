@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import { useAuth } from "../context/AuthContext"
 import { teacherService } from "../api/teachers"
 import { studentService } from "../api/students"
@@ -37,28 +37,6 @@ function Docentes() {
 
   const [nuevaNota, setNuevaNota] = useState(INIT_NOTA)
   const [nuevaAsistencia, setNuevaAsistencia] = useState(INIT_ASISTENCIA)
-  const avatarInputRef = useRef(null)
-
-  function avatarKey(id) { return `avatar_teacher_${id}` }
-
-  async function handleAvatarChange(e) {
-    const file = e.target.files?.[0]
-    if (!file) return
-    const reader = new FileReader()
-    reader.onload = async (event) => {
-      const base64 = event.target.result
-      try {
-        const updated = await teacherService.actualizarAvatar(teacher.id, base64)
-        localStorage.setItem(avatarKey(teacher.id), updated.avatar)
-        setTeacher(prev => ({ ...prev, avatar: updated.avatar }))
-      } catch {
-        localStorage.setItem(avatarKey(teacher.id), base64)
-        setTeacher(prev => ({ ...prev, avatar: base64 }))
-      }
-    }
-    reader.readAsDataURL(file)
-    e.target.value = ''
-  }
 
   const mySubjects = subjects.filter(s => s.teacherId === teacher?.id)
   const selectedSubjectForGrade = mySubjects.find(s => s.id === Number(nuevaNota.materiaId))
@@ -75,10 +53,6 @@ function Docentes() {
           attendanceService.listar(),
         ])
         const me = teachersData.find(t => t.email === user?.email)
-        if (me) {
-          const cached = localStorage.getItem(avatarKey(me.id))
-          if (!me.avatar && cached) me.avatar = cached
-        }
         setTeacher(me || teachersData[0] || null)
         setStudents(studentsData)
         setSubjects(subjectsData)
@@ -211,30 +185,13 @@ function Docentes() {
         <section className={styles.main}>
           {teacher && (
             <div className={styles.informationBlock}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <div className={styles.avatarWrap}>
-                  {teacher.avatar ? (
-                    <img src={teacher.avatar} alt="avatar" className={styles.avatarImg} onClick={() => avatarInputRef.current?.click()} />
-                  ) : (
-                    <div className={styles.avatarInitial} onClick={() => avatarInputRef.current?.click()}>
-                      {teacher.teacherName?.charAt(0) || '?'}
-                    </div>
-                  )}
-                  <div className={styles.avatarOverlay} onClick={() => avatarInputRef.current?.click()}>
-                    📷
-                  </div>
-                </div>
-                <div>
-                  <h2>Panel Docente</h2>
-                  <p style={{ color: '#4a7a9b' }}>{teacher.teacherName} — {teacher.email}</p>
-                  {mySubjects.length > 0 && (
-                    <p style={{ color: '#4a7a9b', fontSize: '0.85rem', marginTop: '0.25rem' }}>
-                      Materias asignadas: {mySubjects.map(s => s.subjectName).join(', ')}
-                    </p>
-                  )}
-                </div>
-              </div>
-              <input type="file" accept="image/*" ref={avatarInputRef} style={{ display: 'none' }} onChange={handleAvatarChange} />
+              <h2>Panel Docente</h2>
+              <p style={{ color: '#4a7a9b' }}>{teacher.teacherName} — {teacher.email}</p>
+              {mySubjects.length > 0 && (
+                <p style={{ color: '#4a7a9b', fontSize: '0.85rem', marginTop: '0.25rem' }}>
+                  Materias asignadas: {mySubjects.map(s => s.subjectName).join(', ')}
+                </p>
+              )}
             </div>
           )}
 
