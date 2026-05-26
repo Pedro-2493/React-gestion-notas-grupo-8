@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useAuth } from "../context/AuthContext"
 import { teacherService } from "../api/teachers"
 import { studentService } from "../api/students"
@@ -37,6 +37,23 @@ function Docentes() {
 
   const [nuevaNota, setNuevaNota] = useState(INIT_NOTA)
   const [nuevaAsistencia, setNuevaAsistencia] = useState(INIT_ASISTENCIA)
+  const avatarInputRef = useRef(null)
+
+  async function handleAvatarChange(e) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = async (event) => {
+      try {
+        const updated = await teacherService.actualizarAvatar(teacher.id, event.target.result)
+        setTeacher(prev => ({ ...prev, avatar: updated.avatar }))
+      } catch {
+        console.warn("Error al guardar el avatar")
+      }
+    }
+    reader.readAsDataURL(file)
+    e.target.value = ''
+  }
 
   const mySubjects = subjects.filter(s => s.teacherId === teacher?.id)
   const selectedSubjectForGrade = mySubjects.find(s => s.id === Number(nuevaNota.materiaId))
@@ -185,13 +202,30 @@ function Docentes() {
         <section className={styles.main}>
           {teacher && (
             <div className={styles.informationBlock}>
-              <h2>Panel Docente</h2>
-              <p style={{ color: '#4a7a9b' }}>{teacher.teacherName} — {teacher.email}</p>
-              {mySubjects.length > 0 && (
-                <p style={{ color: '#4a7a9b', fontSize: '0.85rem', marginTop: '0.25rem' }}>
-                  Materias asignadas: {mySubjects.map(s => s.subjectName).join(', ')}
-                </p>
-              )}
+              <div className={styles.informationBlockTeacher}>
+                <div>
+                  <h2>Panel Docente</h2>
+                  <p style={{ color: '#4a7a9b' }}>{teacher.teacherName} — {teacher.email}</p>
+                  {mySubjects.length > 0 && (
+                    <p style={{ color: '#4a7a9b', fontSize: '0.85rem', marginTop: '0.25rem' }}>
+                      Materias asignadas: {mySubjects.map(s => s.subjectName).join(', ')}
+                    </p>
+                  )}
+                </div>
+                <div className={styles.avatarWrap}>
+                  {teacher.avatar ? (
+                    <img src={teacher.avatar} alt="avatar" className={styles.avatarImg} onClick={() => avatarInputRef.current?.click()} />
+                  ) : (
+                    <div className={styles.avatarInitial} onClick={() => avatarInputRef.current?.click()}>
+                      {teacher.teacherName?.charAt(0) || '?'}
+                    </div>
+                  )}
+                  <div className={styles.avatarOverlay} onClick={() => avatarInputRef.current?.click()}>
+                    📷
+                  </div>
+                </div>
+              </div>
+              <input type="file" accept="image/*" ref={avatarInputRef} style={{ display: 'none' }} onChange={handleAvatarChange} />
             </div>
           )}
 

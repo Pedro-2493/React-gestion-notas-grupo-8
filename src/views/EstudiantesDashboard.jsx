@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useAuth } from "../context/AuthContext"
 import { studentService } from "../api/students"
 import { gradeService } from "../api/grades"
@@ -33,6 +33,23 @@ export default function EstudiantesDashboard() {
   const [notas, setNotas] = useState([])
   const [periodo, setPeriodo] = useState("")
   const [loading, setLoading] = useState(true)
+  const fileInputRef = useRef(null)
+
+  async function handleAvatarChange(e) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = async (event) => {
+      try {
+        const updated = await studentService.actualizarAvatar(student.id, event.target.result)
+        setStudent(prev => ({ ...prev, avatar: updated.avatar }))
+      } catch {
+        console.warn("Error al guardar el avatar")
+      }
+    }
+    reader.readAsDataURL(file)
+    e.target.value = ''
+  }
 
   useEffect(() => {
     async function load() {
@@ -104,8 +121,17 @@ export default function EstudiantesDashboard() {
 
       <div className="card">
         <div className="perfil">
-          <div className="avatar">
-            {student.studentName.charAt(0)}
+          <div className="avatar-wrapper">
+            <div className="avatar" onClick={() => fileInputRef.current?.click()}>
+              {student.avatar ? (
+                <img src={student.avatar} alt="avatar" />
+              ) : (
+                student.studentName.charAt(0)
+              )}
+            </div>
+            <div className="avatar-overlay" onClick={() => fileInputRef.current?.click()}>
+              📷
+            </div>
           </div>
           <div>
             <h2>{student.studentName}</h2>
@@ -113,6 +139,7 @@ export default function EstudiantesDashboard() {
             <p>Email: {student.email}</p>
           </div>
         </div>
+        <input type="file" accept="image/*" ref={fileInputRef} style={{ display: 'none' }} onChange={handleAvatarChange} />
       </div>
 
       {periodos.length > 0 && (
