@@ -6,4 +6,5 @@ export const attendanceService = {
   porEstudianteYMateria: (studentId, subjectId) =>
     api.get(`/attendance/estudiante/${studentId}/materia/${subjectId}`),
   crear: (data) => api.post('/attendance', data),
+  actualizar: (id, data) => api.put(`/attendance/${id}`, data),
 }

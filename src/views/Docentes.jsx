@@ -13,6 +13,8 @@ const TABS = [
   { id: 'asistencia', label: 'Asistencias' },
 ]
 
+const STATUS_OPTIONS = ['PRESENTE', 'AUSENTE', 'TARDANZA']
+
 function Docentes() {
   const { user } = useAuth()
   const [teacher, setTeacher] = useState(null)
@@ -22,6 +24,13 @@ function Docentes() {
   const [attendance, setAttendance] = useState([])
   const [activeTab, setActiveTab] = useState('notas')
   const [loading, setLoading] = useState(true)
+
+  const [editingGradeId, setEditingGradeId] = useState(null)
+  const [editGradeValue, setEditGradeValue] = useState('')
+  const [editGradePeriod, setEditGradePeriod] = useState('')
+
+  const [editingAttendanceId, setEditingAttendanceId] = useState(null)
+  const [editAttendanceStatus, setEditAttendanceStatus] = useState('')
 
   useEffect(() => {
     async function load() {
@@ -47,6 +56,59 @@ function Docentes() {
     }
     load()
   }, [user])
+
+  function startEditGrade(grade) {
+    setEditingGradeId(grade.id)
+    setEditGradeValue(String(grade.value ?? ''))
+    setEditGradePeriod(grade.period || '')
+  }
+
+  function cancelEditGrade() {
+    setEditingGradeId(null)
+    setEditGradeValue('')
+    setEditGradePeriod('')
+  }
+
+  async function saveEditGrade(id) {
+    try {
+      const updated = await gradeService.actualizar(id, {
+        value: parseFloat(editGradeValue),
+        period: editGradePeriod,
+      })
+      setGrades(prev => prev.map(g => (g.id === id ? updated : g)))
+      cancelEditGrade()
+    } catch {
+      console.warn("Error al actualizar la nota")
+    }
+  }
+
+  function startEditAttendance(record) {
+    setEditingAttendanceId(record.id)
+    setEditAttendanceStatus(record.status || '')
+  }
+
+  function cancelEditAttendance() {
+    setEditingAttendanceId(null)
+    setEditAttendanceStatus('')
+  }
+
+  async function saveEditAttendance(id) {
+    try {
+      const updated = await attendanceService.actualizar(id, {
+        status: editAttendanceStatus,
+      })
+      setAttendance(prev => prev.map(a => (a.id === id ? updated : a)))
+      cancelEditAttendance()
+    } catch {
+      console.warn("Error al actualizar la asistencia")
+    }
+  }
+
+  function getGradeValue(g) {
+    if (g.value !== undefined && g.value !== null) return g.value
+    if (g.valor !== undefined && g.valor !== null) return g.valor
+    return 0
+  }
 
   if (loading) {
     return (
@@ -98,18 +160,55 @@ function Docentes() {
                         <th>Materia</th>
                         <th>Nota</th>
                         <th>Periodo</th>
+                        <th>Acciones</th>
                       </tr>
                     </thead>
                     <tbody>
                       {grades.map(g => {
                         const student = students.find(s => s.id === g.student?.id || g.studentId)
                         const subject = subjects.find(s => s.id === g.subject?.id || g.subjectId)
+                        const editing = editingGradeId === g.id
                         return (
                           <tr key={g.id}>
                             <td>{student?.studentName || 'N/A'}</td>
                             <td>{subject?.subjectName || 'N/A'}</td>
-                            <td><strong>{g.value?.toFixed(2)}</strong></td>
-                            <td>{g.period}</td>
+                            <td>
+                              {editing ? (
+                                <input
+                                  type="number"
+                                  step="0.01"
+                                  min="0"
+                                  max="10"
+                                  className={styles.editInput}
+                                  value={editGradeValue}
+                                  onChange={e => setEditGradeValue(e.target.value)}
+                                />
+                              ) : (
+                                <strong>{getGradeValue(g).toFixed(2)}</strong>
+                              )}
+                            </td>
+                            <td>
+                              {editing ? (
+                                <input
+                                  type="text"
+                                  className={styles.editInput}
+                                  value={editGradePeriod}
+                                  onChange={e => setEditGradePeriod(e.target.value)}
+                                />
+                              ) : (
+                                g.period
+                              )}
+                            </td>
+                            <td>
+                              {editing ? (
+                                <div className={styles.actionBtns}>
+                                  <button className={styles.btnSave} onClick={() => saveEditGrade(g.id)}>Guardar</button>
+                                  <button className={styles.btnCancel} onClick={cancelEditGrade}>Cancelar</button>
+                                </div>
+                              ) : (
+                                <button className={styles.btnEdit} onClick={() => startEditGrade(g)}>Editar</button>
+                              )}
+                            </td>
                           </tr>
                         )
                       })}
@@ -164,21 +263,45 @@ function Docentes() {
                         <th>Materia</th>
                         <th>Fecha</th>
                         <th>Estado</th>
+                        <th>Acciones</th>
                       </tr>
                     </thead>
                     <tbody>
                       {attendance.map(a => {
                         const student = students.find(s => s.id === a.student?.id || a.studentId)
                         const subject = subjects.find(s => s.id === a.subject?.id || a.subjectId)
+                        const editing = editingAttendanceId === a.id
                         return (
                           <tr key={a.id}>
                             <td>{student?.studentName || 'N/A'}</td>
                             <td>{subject?.subjectName || 'N/A'}</td>
                             <td>{a.date}</td>
                             <td>
-                              <span className={`${styles.badge} ${a.status === 'PRESENTE' ? styles.badgeVerde : a.status === 'AUSENTE' ? styles.badgeRojo : styles.badgeAmarillo}`}>
-                                {a.status}
-                              </span>
+                              {editing ? (
+                                <select
+                                  className={styles.editSelect}
+                                  value={editAttendanceStatus}
+                                  onChange={e => setEditAttendanceStatus(e.target.value)}
+                                >
+                                  {STATUS_OPTIONS.map(s => (
+                                    <option key={s} value={s}>{s}</option>
+                                  ))}
+                                </select>
+                              ) : (
+                                <span className={`${styles.badge} ${a.status === 'PRESENTE' ? styles.badgeVerde : a.status === 'AUSENTE' ? styles.badgeRojo : styles.badgeAmarillo}`}>
+                                  {a.status}
+                                </span>
+                              )}
+                            </td>
+                            <td>
+                              {editing ? (
+                                <div className={styles.actionBtns}>
+                                  <button className={styles.btnSave} onClick={() => saveEditAttendance(a.id)}>Guardar</button>
+                                  <button className={styles.btnCancel} onClick={cancelEditAttendance}>Cancelar</button>
+                                </div>
+                              ) : (
+                                <button className={styles.btnEdit} onClick={() => startEditAttendance(a)}>Editar</button>
+                              )}
                             </td>
                           </tr>
                         )

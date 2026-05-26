@@ -7,4 +7,5 @@ export const gradeService = {
   porEstudianteYPeriodo: (studentId, period) =>
     api.get(`/grades/estudiante/${studentId}/periodo?period=${encodeURIComponent(period)}`),
   crear: (data) => api.post('/grades', data),
+  actualizar: (id, data) => api.put(`/grades/${id}`, data),
 }
