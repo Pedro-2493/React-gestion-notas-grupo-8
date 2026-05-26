@@ -211,16 +211,7 @@ function Docentes() {
         <section className={styles.main}>
           {teacher && (
             <div className={styles.informationBlock}>
-              <div className={styles.informationBlockTeacher}>
-                <div>
-                  <h2>Panel Docente</h2>
-                  <p style={{ color: '#4a7a9b' }}>{teacher.teacherName} — {teacher.email}</p>
-                  {mySubjects.length > 0 && (
-                    <p style={{ color: '#4a7a9b', fontSize: '0.85rem', marginTop: '0.25rem' }}>
-                      Materias asignadas: {mySubjects.map(s => s.subjectName).join(', ')}
-                    </p>
-                  )}
-                </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                 <div className={styles.avatarWrap}>
                   {teacher.avatar ? (
                     <img src={teacher.avatar} alt="avatar" className={styles.avatarImg} onClick={() => avatarInputRef.current?.click()} />
@@ -232,6 +223,15 @@ function Docentes() {
                   <div className={styles.avatarOverlay} onClick={() => avatarInputRef.current?.click()}>
                     📷
                   </div>
+                </div>
+                <div>
+                  <h2>Panel Docente</h2>
+                  <p style={{ color: '#4a7a9b' }}>{teacher.teacherName} — {teacher.email}</p>
+                  {mySubjects.length > 0 && (
+                    <p style={{ color: '#4a7a9b', fontSize: '0.85rem', marginTop: '0.25rem' }}>
+                      Materias asignadas: {mySubjects.map(s => s.subjectName).join(', ')}
+                    </p>
+                  )}
                 </div>
               </div>
               <input type="file" accept="image/*" ref={avatarInputRef} style={{ display: 'none' }} onChange={handleAvatarChange} />
