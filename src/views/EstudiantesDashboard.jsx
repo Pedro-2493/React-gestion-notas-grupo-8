@@ -48,7 +48,7 @@ export default function EstudiantesDashboard() {
           const gradesData = await gradeService.porEstudiante(me.id)
           const mapped = gradesData.map(g => ({
             id: g.id,
-            subjectId: g.subjectId,
+            subjectId: g.subject?.id ?? g.subjectId,
             period: g.period,
             value: g.value,
           }))

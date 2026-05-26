@@ -38,7 +38,7 @@ function AppContent() {
         <Route path="/admin" element={<ProtectedRoute roles={['administrador']}><AdminDashboard /></ProtectedRoute>} />
       </Routes>
       {!hideNavbar && <Footer />}
-      <WhatsAppButton />
+      {location.pathname === '/' && <WhatsAppButton />}
     </>
   )
 }
