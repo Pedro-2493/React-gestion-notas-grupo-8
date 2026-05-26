@@ -39,16 +39,21 @@ function Docentes() {
   const [nuevaAsistencia, setNuevaAsistencia] = useState(INIT_ASISTENCIA)
   const avatarInputRef = useRef(null)
 
+  function avatarKey(id) { return `avatar_teacher_${id}` }
+
   async function handleAvatarChange(e) {
     const file = e.target.files?.[0]
     if (!file) return
     const reader = new FileReader()
     reader.onload = async (event) => {
+      const base64 = event.target.result
       try {
-        const updated = await teacherService.actualizarAvatar(teacher.id, event.target.result)
+        const updated = await teacherService.actualizarAvatar(teacher.id, base64)
+        localStorage.setItem(avatarKey(teacher.id), updated.avatar)
         setTeacher(prev => ({ ...prev, avatar: updated.avatar }))
       } catch {
-        console.warn("Error al guardar el avatar")
+        localStorage.setItem(avatarKey(teacher.id), base64)
+        setTeacher(prev => ({ ...prev, avatar: base64 }))
       }
     }
     reader.readAsDataURL(file)
@@ -70,6 +75,10 @@ function Docentes() {
           attendanceService.listar(),
         ])
         const me = teachersData.find(t => t.email === user?.email)
+        if (me) {
+          const cached = localStorage.getItem(avatarKey(me.id))
+          if (!me.avatar && cached) me.avatar = cached
+        }
         setTeacher(me || teachersData[0] || null)
         setStudents(studentsData)
         setSubjects(subjectsData)

@@ -35,16 +35,21 @@ export default function EstudiantesDashboard() {
   const [loading, setLoading] = useState(true)
   const fileInputRef = useRef(null)
 
+  function avatarKey(id) { return `avatar_student_${id}` }
+
   async function handleAvatarChange(e) {
     const file = e.target.files?.[0]
     if (!file) return
     const reader = new FileReader()
     reader.onload = async (event) => {
+      const base64 = event.target.result
       try {
-        const updated = await studentService.actualizarAvatar(student.id, event.target.result)
+        const updated = await studentService.actualizarAvatar(student.id, base64)
+        localStorage.setItem(avatarKey(student.id), updated.avatar)
         setStudent(prev => ({ ...prev, avatar: updated.avatar }))
       } catch {
-        console.warn("Error al guardar el avatar")
+        localStorage.setItem(avatarKey(student.id), base64)
+        setStudent(prev => ({ ...prev, avatar: base64 }))
       }
     }
     reader.readAsDataURL(file)
@@ -61,6 +66,8 @@ export default function EstudiantesDashboard() {
         setSubjects(subjectsData.length ? subjectsData : MOCK_SUBJECTS)
         const me = studentsData.find(s => s.email === user?.email)
         if (me) {
+          const cached = localStorage.getItem(avatarKey(me.id))
+          if (!me.avatar && cached) me.avatar = cached
           setStudent(me)
           const gradesData = await gradeService.porEstudiante(me.id)
           const mapped = gradesData.map(g => ({
@@ -81,6 +88,8 @@ export default function EstudiantesDashboard() {
 
       const mockStudent = MOCK_STUDENTS.find(s => s.email === user?.email)
       if (mockStudent) {
+        const cached = localStorage.getItem(avatarKey(mockStudent.id))
+        if (cached) mockStudent.avatar = cached
         setStudent(mockStudent)
         setNotas(MOCK_GRADES)
         const periods = [...new Set(MOCK_GRADES.map(n => n.period))]
