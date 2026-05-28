@@ -16,6 +16,7 @@ import AdminMaterias from "./views/AdminMaterias";
 import WhatsAppButton from "./components/WhatsAppButton";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
+import AnalyticsCharts from "./components/AnalyticsCharts";
 
 function AppContent() {
   const location = useLocation()
@@ -35,6 +36,7 @@ function AppContent() {
         <Route path="/admin/docentes" element={<ProtectedRoute roles={['administrador']}><AdminDocentes /></ProtectedRoute>} />
         <Route path="/admin/estudiantes" element={<ProtectedRoute roles={['administrador']}><AdminEstudiantes /></ProtectedRoute>} />
         <Route path="/admin/materias" element={<ProtectedRoute roles={['administrador']}><AdminMaterias /></ProtectedRoute>} />
+        <Route path="/admin/analytics" element={<ProtectedRoute roles={['administrador']}><AnalyticsCharts /></ProtectedRoute>} />
         <Route path="/admin" element={<ProtectedRoute roles={['administrador']}><AdminDashboard /></ProtectedRoute>} />
       </Routes>
       {!hideNavbar && <Footer />}

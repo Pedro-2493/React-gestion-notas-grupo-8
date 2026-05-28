@@ -130,6 +130,10 @@ function AdminDashboard() {
               <span>👩‍🎓</span>
               Ver Estudiantes
             </a>
+            <a href="/admin/analytics" className="admin-btn">
+              <span>📊</span>
+              Analiticas (Python)
+            </a>
             <a href="/contacto" className="admin-btn">
               <span>📬</span>
               Soporte / Contacto
