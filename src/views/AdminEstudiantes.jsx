@@ -47,9 +47,10 @@ function AdminEstudiantes() {
       await studentService.actualizar(id, editForm)
       setMensaje({ tipo: 'exito', texto: 'Estudiante actualizado correctamente' })
       cancelarEdicion()
-      cargar()
-    } catch {
-      setMensaje({ tipo: 'error', texto: 'Error al actualizar el estudiante' })
+      await cargar()
+    } catch (e) {
+      console.error('Error al actualizar:', e)
+      setMensaje({ tipo: 'error', texto: `Error al actualizar: ${e.message}` })
     }
   }
 
@@ -58,9 +59,10 @@ function AdminEstudiantes() {
     try {
       await studentService.eliminar(id)
       setMensaje({ tipo: 'exito', texto: 'Estudiante eliminado correctamente' })
-      cargar()
-    } catch {
-      setMensaje({ tipo: 'error', texto: 'Error al eliminar el estudiante' })
+      await cargar()
+    } catch (e) {
+      console.error('Error al eliminar:', e)
+      setMensaje({ tipo: 'error', texto: `Error al eliminar: ${e.message}` })
     }
   }
 
