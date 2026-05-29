@@ -2,7 +2,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./views/Home";
-import Contacto from "./views/Contacto";
+import Contacto from "./views/contacto";
 import Docentes from "./views/Docentes";
 import LoginPage from "./views/LoginPage";
 import UsuariosList from "./views/UsuariosList";
